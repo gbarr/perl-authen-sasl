@@ -1,3 +1,4 @@
+ChangeLog
 MANIFEST
 Makefile.PL
 api.txt
@@ -12,3 +13,8 @@ lib/Authen/SASL/Perl/ANONYMOUS.pm
 lib/Authen/SASL/Perl/CRAM_MD5.pm
 lib/Authen/SASL/Perl/EXTERNAL.pm
 lib/Authen/SASL/Perl/PLAIN.pm
+t/anon.t
+t/callback.t
+t/cram_md5.t
+t/external.t
+t/plain.t

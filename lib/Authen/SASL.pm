@@ -5,10 +5,15 @@
 package Authen::SASL;
 
 use strict;
-use vars qw($VERSION);
+use vars qw($VERSION @Plugins);
 use Carp;
 
 $VERSION = "2.00";
+
+@Plugins = qw(
+	Authen::SASL::Cyrus
+	Authen::SASL::Perl
+);
 
 sub new {
   my $pkg = shift;
@@ -53,8 +58,7 @@ sub callback {
 sub client_new { # $self, $service, $host, $secflags
   my $self = shift;
 
-  foreach my $plugin (qw(Cyrus Perl)) {
-    my $pkg = __PACKAGE__ . "::$plugin";
+  foreach my $pkg (@Plugins) {
     if (eval "require $pkg") {
       return ($self->{conn} = $pkg->client_new($self, @_));
     }
