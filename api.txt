@@ -1,0 +1,49 @@
+Basically the Authen::SASL module gathers some info. When ->client_new
+is called the plugin is called to create a $conn object. At that point
+it should query the Authen::SASL object for mechanisms and callbacks
+
+Properties are then set on the $conn object by calling $conn->property
+
+Then client_start is called
+
+  Currently client_start returns the mechanism name and the initial
+  string, but I am thinking about changing that to just the initial
+  string. The mecanism is avaliabe via a method call anyway.
+
+
+Then we call client_step with a challenge string to get a response
+string.
+
+
+Quite simple really I think.
+
+
+So the plugin just needs to support
+
+  client_new
+  client_start
+  client_step
+  property     # set/get for properties
+  mechanism    # returns the name of the chosen mechanism
+  service      # the service name passed to client_new
+  host         # the hostname passed to client_new
+
+
+properties and callbacks are passed by name, so you will need to convert
+them to numbers.
+
+There are three types of call back
+
+  user => 'fred'
+
+When the user callback is called, it will just return the string 'fred'
+
+  user => \&subname
+
+When the user callback is called, &subname will be called and it will
+be passed the $conn object as the first argument.
+
+  user => [ \&subname, 1, 2, 3]
+
+When the user callback is called, &subname will be called. It will be passed
+the $conn object, followed by all other values in the array
