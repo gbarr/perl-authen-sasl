@@ -121,7 +121,7 @@ Authen::SASL::Perl::DIGEST_MD5 - Digest MD5 Authentication class
 
 =head1 SYNOPSIS
 
-  use Authen::SASL;
+  use Authen::SASL qw(Perl);
 
   $sasl = Authen::SASL->new(
     mechanism => 'DIGEST-MD5',
@@ -134,13 +134,21 @@ Authen::SASL::Perl::DIGEST_MD5 - Digest MD5 Authentication class
 
 =head1 DESCRIPTION
 
-This method implements the DIGEST MD5 SASL algorithm, as described in RFC-2831.
+This method implements the client part of the DIGEST-MD5 SASL algorithm,
+as described in RFC-2831.
+
+This module only implements the I<auth> operation which offers authentication
+but neither integrity protection not encryption.
 
 =head2 CALLBACK
 
 The callbacks used are:
 
 =over 4
+
+=item authname
+
+The authorization id to use after successful authentication
 
 =item user
 
@@ -158,18 +166,20 @@ The service name when authenticating to a replicated service
 
 =head1 SEE ALSO
 
-L<Authen::SASL>
+L<Authen::SASL>,
+L<Authen::SASL::Perl>
 
 =head1 AUTHORS
  
 Graham Barr, Djamel Boudjerda (NEXOR) Paul Connolly, Julian Onions (NEXOR)
 
 Please report any bugs, or post any suggestions, to the perl-ldap mailing list
-<perl-ldap-dev@lists.sourceforge.net>
+<perl-ldap@perl.org>
 
 =head1 COPYRIGHT 
 
-Copyright (c) 2003 Graham Barr, Djamel Boudjerda, Paul Connolly, Julian Onions and Nexor.
+Copyright (c) 2003 Graham Barr, Djamel Boudjerda, Paul Connolly, Julian Onions
+and Nexor.
 All rights reserved. This program is free software; you can redistribute 
 it and/or modify it under the same terms as Perl itself.
 
