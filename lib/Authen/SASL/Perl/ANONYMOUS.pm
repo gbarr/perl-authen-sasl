@@ -36,7 +36,7 @@ __END__
 
 =head1 NAME
 
-Authen::SASL::Perl::ANONYMOUS - Anynymous Authentication class
+Authen::SASL::Perl::ANONYMOUS - Anonymous Authentication class
 
 =head1 SYNOPSIS
 
