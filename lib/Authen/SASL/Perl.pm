@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION);
 use Carp;
 
-$VERSION = "1.01";
+$VERSION = "1.02";
 
 my %secflags = (
 	noplaintext  => 1,
@@ -40,11 +40,16 @@ sub client_new {
   $mpkg[0]->_init($self);
 }
 
-sub code  { 0  }
-sub error { '' }
-
+sub code     { defined(shift->{error}) || 0 }
+sub error    { shift->{error}    }
 sub service  { shift->{service}  }
 sub host     { shift->{host}     }
+
+sub set_error {
+  my $self = shift;
+  $self->{error} = shift;
+  return;
+}
 
 # set/get property
 sub property {

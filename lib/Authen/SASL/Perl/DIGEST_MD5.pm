@@ -10,7 +10,7 @@ use strict;
 use vars qw($VERSION @ISA $CNONCE);
 use Digest::MD5 qw(md5_hex md5);
 
-$VERSION = "1.00";
+$VERSION = "1.01";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -46,7 +46,9 @@ sub client_step    # $self, $server_sasl_credentials
     }
     $sparams{$k} = $v;
   }
-  die $challenge if length $challenge;
+
+  return $self->set_error("Bad challenge: '$challenge'"
+    if length $challenge;
 
   my %response = (
     nonce        => $sparams{'nonce'},
