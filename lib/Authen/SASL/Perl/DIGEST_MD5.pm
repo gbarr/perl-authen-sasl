@@ -47,7 +47,7 @@ sub client_step    # $self, $server_sasl_credentials
     $sparams{$k} = $v;
   }
 
-  return $self->set_error("Bad challenge: '$challenge'"
+  return $self->set_error("Bad challenge: '$challenge'")
     if length $challenge;
 
   my %response = (
