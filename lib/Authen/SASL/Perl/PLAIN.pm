@@ -28,7 +28,7 @@ sub client_start {
   my @parts = map {
     my $v = $self->_call($_);
     defined($v) ? $v : ''
-  } qw(user authname pass);
+  } qw(authname user pass);
 
   join("\0", @parts);
 }
