@@ -25,7 +25,7 @@ $conn->mechanism eq 'PLAIN' or print "not ";
 print "ok 3\n";
 
 
-$conn->client_start eq "gbarr\0none\0fred" or print "not ";
+$conn->client_start eq "none\0gbarr\0fred" or print "not ";
 print "ok 4\n";
 
 print "not " if defined $conn->client_step("xyz") ;
