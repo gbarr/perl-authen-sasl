@@ -2,9 +2,7 @@
 
 use Test::More tests => 75;
 
-use Authen::SASL;
-
-@Authen::SASL::Plugins = qw(Authen::SASL::Perl);
+use Authen::SASL qw(Perl);
 
 my %order = qw(
   ANONYMOUS	0

@@ -8,12 +8,23 @@ use strict;
 use vars qw($VERSION @Plugins);
 use Carp;
 
-$VERSION = "2.08";
+$VERSION = "2.08_01";
 
 @Plugins = qw(
 	Authen::SASL::Cyrus
 	Authen::SASL::Perl
 );
+
+
+sub import {
+  shift;
+  return unless @_;
+
+  local $SIG{__DIE__};
+  @Plugins = grep { /^[:\w]+$/ and eval "require $_" } map { /::/ ? $_ : "Authen::SASL::$_" } @_
+    or croak "no valid Authen::SASL plugins found";
+}
+
 
 sub new {
   my $pkg = shift;

@@ -6,9 +6,7 @@ BEGIN {
 
 use Test::More ($Digest::MD5::VERSION ? (tests => 5) : (skip_all => 'Need Digest::MD5'));
 
-use Authen::SASL;
-
-@Authen::SASL::Plugins = qw(Authen::SASL::Perl);
+use Authen::SASL qw(Perl);
 
 my $sasl = Authen::SASL->new(
   mechanism => 'DIGEST-MD5',

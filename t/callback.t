@@ -2,9 +2,7 @@
 
 use Test::More tests => 7;
 
-use Authen::SASL;
-
-@Authen::SASL::Plugins = qw(Authen::SASL::Perl);
+use Authen::SASL qw(Perl);
 
 my $sasl = Authen::SASL->new(
   mechanism => 'PLAIN',

@@ -39,6 +39,18 @@ are supported).
 
 =back
 
+By default the order in which these plugins are selected is 
+Authen::SASL::Cyrus first and then Authen::SASL::Perl.
+
+If you want to change it or want to specifically use one
+implementation only simply do
+
+ use Authen::SASL qw(Perl);
+
+or if you have another plugin module that supports the Authen::SASL API
+
+ use Authen::SASL qw(My::SASL::Plugin);
+
 =head2 CONTRUCTOR
 
 The contructor may be called with or without arguments. Passing arguments is
