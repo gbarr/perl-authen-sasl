@@ -10,7 +10,7 @@ use strict;
 use vars qw($VERSION @ISA $CNONCE);
 use Digest::MD5 qw(md5_hex md5);
 
-$VERSION = "1.03";
+$VERSION = "1.04";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -19,7 +19,7 @@ my %secflags = (
 );
 
 # some have to be quoted - some don't - sigh!
-my %qdval; @qdval{qw(username realm nonce cnonce digest-uri qop)} = ();
+my %qdval; @qdval{qw(username realm nonce cnonce digest-uri)} = ();
 
 sub _order { 3 }
 sub _secflags {
@@ -51,6 +51,9 @@ sub client_step    # $self, $server_sasl_credentials
   return $self->set_error("Bad challenge: '$challenge'")
     if length $challenge;
 
+  return $self->set_error("Server does not support auth (qop = $sparams{'qop'})")
+    unless grep { /^auth$/ } split(/,/, $sparams{'qop'});
+
   my %response = (
     nonce        => $sparams{'nonce'},
     username     => $self->_call('user'),
@@ -58,7 +61,7 @@ sub client_step    # $self, $server_sasl_credentials
     nonce        => $sparams{'nonce'},
     cnonce       => md5_hex($CNONCE || join (":", $$, time, rand)),
     'digest-uri' => $self->service . '/' . $self->host,
-    qop          => $sparams{'qop'},
+    qop          => 'auth',
     nc           => sprintf("%08d",     ++$self->{nonce}{$sparams{'nonce'}}),
     charset      => $sparams{'charset'},
   );
