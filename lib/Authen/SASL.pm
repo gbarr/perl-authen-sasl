@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION @Plugins);
 use Carp;
 
-$VERSION = "2.01";
+$VERSION = "2.02";
 
 @Plugins = qw(
 	Authen::SASL::Cyrus

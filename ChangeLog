@@ -1,3 +1,15 @@
+2002-05-28 15:22  Graham Barr
+
+	* lib/Authen/SASL.pm:
+
+	Release 2.02
+	
+2002-05-28 14:36  Graham Barr
+
+	* MANIFEST, lib/Authen/SASL/Perl/LOGIN.pm:
+
+	Add LOGIN mechanism commonly used by SMTP
+	
 2002-03-31 15:39  Graham Barr
 
 	* lib/Authen/SASL.pm:
