@@ -19,10 +19,10 @@ check_nmake();      # check and download nmake.exe for Win32
 sub MY::postamble {
   return <<'POSTAMBLE';
 
-disttest : distdir_check_sig
+distdir : manifest run_cpansign
 
-distdir_check_sig : distdir
-	cd $(DISTVNAME) && $(PERL) -MModule::Signature=verify -e 'exit verify()'
+run_cpansign :
+	cpansign -s
 
 POSTAMBLE
 

@@ -1,0 +1,11 @@
+Authen-SASL 1.07 -- Sat Apr 10 09:06:21 BST 2004
+
+Bug Fixes
+  * Fixed test bug if Digest::HMAC_MD5 was not installed
+  * Fixed order of values sent in the PLAIN mechanism
+
+Enhancements
+  * Added support in the framework for server-side plugins
+
+ChangeLogs for releases prior to 1.07 may be found at
+http://svn.mutatus.co.uk/browse/Authen-SASL/tags/Authen-SASL-2.06/ChangeLog

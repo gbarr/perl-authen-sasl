@@ -1,4 +1,4 @@
-ChangeLog
+Changes
 MANIFEST
 META.yml
 Makefile.PL
@@ -6,13 +6,6 @@ SIGNATURE
 api.txt
 compat_pl
 example_pl
-inc/Module/Install.pm
-inc/Module/Install/Base.pm
-inc/Module/Install/Can.pm
-inc/Module/Install/Fetch.pm
-inc/Module/Install/Makefile.pm
-inc/Module/Install/Metadata.pm
-inc/Module/Install/Win32.pm
 lib/Authen/SASL.pm
 lib/Authen/SASL.pod
 lib/Authen/SASL/CRAM_MD5.pm
