@@ -8,13 +8,14 @@ use strict;
 use vars qw($VERSION);
 use Carp;
 
-$VERSION = "1.03";
+$VERSION = "1.04";
 
 my %secflags = (
 	noplaintext  => 1,
 	noanonymous  => 1,
 	nodictionary => 1,
 );
+my %have;
 
 sub client_new {
   my ($pkg, $parent, $service, $host, $secflags) = @_;
@@ -30,7 +31,8 @@ sub client_new {
   my @mpkg = sort {
     $b->_order <=> $a->_order
   } grep {
-    eval "require $_;" && $_->_secflags(@sec) == @sec
+    my $have = $have{$_} ||= (eval "require $_;" and $_->can('_secflags')) ? 1 : -1;
+    $have > 0 and $_->_secflags(@sec) == @sec
   } map {
     (my $mpkg = __PACKAGE__ . "::$_") =~ s/-/_/g;
     $mpkg;
@@ -40,7 +42,7 @@ sub client_new {
   $mpkg[0]->_init($self);
 }
 
-sub _order { 0 }
+sub _order   { 0 }
 sub code     { defined(shift->{error}) || 0 }
 sub error    { shift->{error}    }
 sub service  { shift->{service}  }
