@@ -11,7 +11,7 @@ my %order = qw(
   EXTERNAL	2
   DIGEST-MD5	3
 );
-my $skip3 = !eval { require Authen::SASL::Perl::Digest_MD5; };
+my $skip3 = !eval { require Authen::SASL::Perl::DIGEST_MD5; };
 
 print "1..75\n";
 
