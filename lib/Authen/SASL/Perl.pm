@@ -56,6 +56,17 @@ sub property {
   1;
 }
 
+sub callback {
+  my $self = shift;
+
+  return $self->{callback}{$_[0]} if @_ == 1;
+
+  my %new = @_;
+  @{$self->{callback}}{keys %new} = values %new;
+
+  $self->{callback};
+}
+
 # Should be defined in the mechanism sub-class
 sub mechanism    { undef }
 sub client_step  { undef }
