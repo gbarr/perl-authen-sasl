@@ -1,3 +1,6 @@
+#!perl
+
+use Test::More tests => 75;
 
 use Authen::SASL;
 
@@ -11,11 +14,7 @@ my %order = qw(
   EXTERNAL	2
   DIGEST-MD5	3
 );
-my $skip3 = !eval { require Authen::SASL::Perl::DIGEST_MD5; };
-
-print "1..75\n";
-
-my $i =0;
+my $skip3 = !eval { require Digest::MD5 and $Digest::MD5::VERSION || $Digest::MD5::VERSION };
 
 foreach my $level (reverse 0..3) {
   my @mech = grep { $order{$_} <= $level } keys %order;
@@ -24,8 +23,8 @@ foreach my $level (reverse 0..3) {
     my $mech = join(" ",@mech);
     print "# $level $mech\n";
     if ($level == 3 and $skip3) {
-      for (1..5) {
-	print "ok ",++$i," # skip\n";
+      SKIP: {
+	skip "requires Digest::MD5", 5;
       }
       next;
     }
@@ -36,23 +35,17 @@ foreach my $level (reverse 0..3) {
 	pass => 'fred',
 	authname => 'none'
       },
-    ) or print "not ";
-    print "ok ",++$i,"\n";
+    );
+    ok($sasl, "new");
 
-    $sasl->mechanism eq $mech
-      or print "not ";
-    print "ok ",++$i,"\n";
+    is($sasl->mechanism, $mech, "sasl mechanism");
 
-    my $conn = $sasl->client_new("ldap","localhost")
-      or print "not ";
-    print "ok ",++$i,"\n";
+    my $conn = $sasl->client_new("ldap","localhost");
+    ok($conn, 'client_new');
 
-    my $chosen = $conn->mechanism
-      or print "not ";
-    print "ok ",++$i,"\n";
+    my $chosen = $conn->mechanism;
+    ok($chosen, 'conn mechanism ' . ($chosen || '?'));
 
-    ($order{$chosen} || 0) == $level
-      or print "not ";
-    print "ok ",++$i,"\n";
+    is($order{$chosen}, $level, 'mechanism level');
   }
 }

@@ -9,6 +9,10 @@ author		('Graham Barr <gbarr@pobox.com>');
 version_from	('lib/Authen/SASL.pm');
 license		('perl');
 
+requires	( perl => 5.005 );
+
+include_deps	('Test::More');
+
 check_nmake();      # check and download nmake.exe for Win32
 
 &Makefile->write;

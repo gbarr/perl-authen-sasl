@@ -1,47 +1,40 @@
+#!perl
+
+use Test::More tests => 7;
 
 use Authen::SASL;
 
 @Authen::SASL::Plugins = qw(Authen::SASL::Perl);
 
-print "1..7\n";
-
 my $sasl = Authen::SASL->new(
   mechanism => 'PLAIN',
   callback => {
     user => 'gbarr',
-    pass => \&pass,
-    authname => [ \&authname, 1 ],
+    pass => \&cb_pass,
+    authname => [ \&cb_authname, 1 ],
   },
-) or print "not ";
-print "ok 1\n";
+);
+ok($sasl, 'new');
 
-$sasl->mechanism eq 'PLAIN'
-  or print "not ";
-print "ok 2\n";
+is($sasl->mechanism,	'PLAIN',	'sasl mechanism');
 
 my $conn = $sasl->client_new("ldap","localhost");
 
-$conn->mechanism eq 'PLAIN' or print "not ";
-print "ok 3\n";
+is($conn->mechanism,	'PLAIN',	'conn mechanism');
 
 my $test = 4;
 
-$conn->client_start eq "none\0gbarr\0fred" or print "not ";
-print "ok 6\n";
+is($conn->client_start,	"none\0gbarr\0fred", "client_start");
 
-print "not " if defined $conn->client_step("xyz") ;
-print "ok 7\n";
+is($conn->client_step("xyz"), undef, "client_step");
 
-sub pass {
-  print "#pass\n";
-  print "ok ",$test++,"\n";
+sub cb_pass {
+  ok(1,'pass callback');
   'fred';
 }
 
-sub authname {
-  print "#authname\n";
-  print "not " unless @_ == 2 and $_[1] == 1;
-  print "ok ",$test++,"\n";
+sub cb_authname {
+  ok((@_ == 2 and $_[1] == 1), 'authname callback');
   'none';
 }
 

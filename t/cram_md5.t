@@ -1,11 +1,14 @@
+#!perl
+
+BEGIN {
+  eval { require Digest::HMAC_MD5 }
+}
+
+use Test::More ($Digest::HMAC_MD5::VERSION ? (tests => 5) : (skip_all => 'Need Digest::HMAC_MD5'));
 
 use Authen::SASL;
 
 @Authen::SASL::Plugins = qw(Authen::SASL::Perl);
-
-eval { require Digest::HMAC_MD5 } or print("1..0\n"), exit;
-
-print "1..5\n";
 
 my $sasl = Authen::SASL->new(
   mechanism => 'CRAM-MD5',
@@ -14,23 +17,18 @@ my $sasl = Authen::SASL->new(
     pass => 'fred',
     authname => 'none'
   },
-) or print "not ";
-print "ok 1\n";
+);
+ok($sasl, 'new');
 
-$sasl->mechanism eq 'CRAM-MD5'
-  or print "not ";
-print "ok 2\n";
+is($sasl->mechanism, 'CRAM-MD5', 'sasl mechanism');
 
 my $conn = $sasl->client_new("ldap","localhost", "noplaintext noanonymous");
 
-$conn->mechanism eq 'CRAM-MD5' or print "not ";
-print "ok 3\n";
+is($conn->mechanism, 'CRAM-MD5', 'conn mechanism');
 
 
-$conn->client_start eq '' or print "not ";
-print "ok 4\n";
+is($conn->client_start, '', 'client_start');
 
-$conn->client_step("xyz") eq 'gbarr 36c931fe47f3fe9c7adbf810b3c7c4ad' or print "not ";
-print "ok 5\n";
+is($conn->client_step("xyz"), 'gbarr 36c931fe47f3fe9c7adbf810b3c7c4ad', 'client_step');
 
 

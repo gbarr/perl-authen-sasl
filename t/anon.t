@@ -1,9 +1,11 @@
+#!perl
+
+use Test::More tests => 5;
 
 use Authen::SASL;
 
 @Authen::SASL::Plugins = qw(Authen::SASL::Perl);
 
-print "1..5\n";
 
 my $sasl = Authen::SASL->new(
   mechanism => 'ANONYMOUS',
@@ -12,23 +14,21 @@ my $sasl = Authen::SASL->new(
     pass => 'fred',
     authname => 'none'
   },
-) or print "not ";
-print "ok 1\n";
+);
 
-$sasl->mechanism eq 'ANONYMOUS'
-  or print "not ";
-print "ok 2\n";
+ok($sasl, 'new');
+
+is($sasl->mechanism, 'ANONYMOUS', 'mechanism is ANONYMOUS');
 
 my $conn = $sasl->client_new("ldap","localhost");
 
-$conn->mechanism eq 'ANONYMOUS' or print "not ";
-print "ok 3\n";
+is($conn->mechanism, 'ANONYMOUS', 'connection mechanism is ANONYMOUS');
 
+my $initial = $conn->client_start;
 
-$conn->client_start eq 'none' or print "not ";
-print "ok 4\n";
+ok($initial eq 'none', 	'client_start');
 
-$conn->client_step("xyz") eq 'none' or print "not ";
-print "ok 5\n";
+my $step = $conn->client_step("xyz");
 
+is($step, 'none', 'client_step');
 
