@@ -34,7 +34,8 @@ entirely in Perl.
 
 =item Authen::SASL::Cyrus
 
-This module uses the cyrus V1 C library.
+This module uses the Cyrus SASL C-library (both version 1 and 2 
+are supported).
 
 =back
 
@@ -66,13 +67,30 @@ Sets the given callbacks to the given values
 
 =item client_new SERVICE, HOST, SECURITY
 
-Creates and returns a new connection object.
+Creates and returns a new connection object for a client-side connection.
+
+=item server_new SERVICE, HOST
+
+Creates and returns a new connection object for a server-side connection.
+Currently only supported by L<Authen::SASL::Cyrus>.
 
 =back
 
 =head1 The Connection Class
 
 =over 4
+
+=item server_start ( CHALLENGE )
+
+server_start begins the authentication using the chosen mechanism.
+If the mechanism is not supported by the installed SASL it fails.
+Because for some mechanisms the client has to start the negotiation,
+you can give the client challenge as a parameter.
+
+=item server_step ( CHALLENGE )
+
+server_step performs the next step in the negotiation process. The
+first parameter you give is the clients challenge/response.
 
 =item client_start
 
@@ -91,11 +109,11 @@ empty list on error.
 
 =item service
 
-Returns the service argument that was passed to C<client_new>
+Returns the service argument that was passed to *_new-methods.
 
 =item host
 
-Returns the host argument that was passed to C<client_new>
+Returns the host argument that was passed to *_new-methods.
 
 =item mechanism
 
@@ -130,7 +148,8 @@ passing an code reference that, when called, returns the value.
 
 =head1 SEE ALSO
 
-L<Authen::SASL::Perl>
+L<Authen::SASL::Perl>, L<Authen::SASL::Cyrus> (for more methods that currently
+only support by Authen::SASL::Cyrus)
 
 =head1 AUTHOR
 
@@ -141,7 +160,7 @@ Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 
 =head1 COPYRIGHT
 
-Copyright (c) 1998-2002 Graham Barr. All rights reserved. This program is
+Copyright (c) 1998-2004 Graham Barr. All rights reserved. This program is
 free software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 

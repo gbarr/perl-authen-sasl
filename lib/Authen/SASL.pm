@@ -1,4 +1,4 @@
-# Copyright (c) 2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# Copyright (c) 2004 Graham Barr <gbarr@pobox.com>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
@@ -59,12 +59,23 @@ sub client_new { # $self, $service, $host, $secflags
   my $self = shift;
 
   foreach my $pkg (@Plugins) {
-    if (eval "require $pkg") {
+    if (eval "require $pkg" and $pkg->can("client_new")) {
       return ($self->{conn} = $pkg->client_new($self, @_));
     }
   }
 
   croak "Cannot find a SASL Connection library";
+}
+
+sub server_new { # $self, $service, $host, $secflags
+  my $self = shift;
+
+  foreach my $pkg (@Plugins) {
+    if (eval "require $pkg" and $pkg->can("server_new")) {
+      return ($self->{conn} = $pkg->server_new($self, @_));
+    }
+  }
+  croak "Cannot find a SASL Connection library for server-side authentication";
 }
 
 # Compat.
