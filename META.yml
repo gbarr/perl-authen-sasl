@@ -1,0 +1,10 @@
+name: Authen-SASL
+version: 2.06
+abstract: SASL Authentication framework
+author: Graham Barr <gbarr@pobox.com>
+license: perl
+distribution_type: module
+private:
+  directory:
+    - inc
+generated_by: Module::Install version 0.24
