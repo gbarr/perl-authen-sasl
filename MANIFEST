@@ -12,6 +12,7 @@ lib/Authen/SASL/Perl.pm
 lib/Authen/SASL/Perl/ANONYMOUS.pm
 lib/Authen/SASL/Perl/CRAM_MD5.pm
 lib/Authen/SASL/Perl/EXTERNAL.pm
+lib/Authen/SASL/Perl/LOGIN.pm
 lib/Authen/SASL/Perl/PLAIN.pm
 t/anon.t
 t/callback.t
