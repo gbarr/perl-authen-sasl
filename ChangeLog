@@ -1,3 +1,39 @@
+2003-05-19 22:41  Graham Barr
+
+	* lib/Authen/SASL.pm:
+
+	Release 2.04
+	
+2003-05-19 22:40  Graham Barr
+
+	* t/digest_md5.t:
+
+	Avoid used only once warning
+	
+2003-05-19 17:06  Graham Barr
+
+	* MANIFEST, lib/Authen/SASL/Perl/DIGEST_MD5.pm, t/digest_md5.t:
+
+	Add DIGEST-MD5 mechanism
+	
+2003-05-19 16:42  Graham Barr
+
+	* MANIFEST, t/login.t:
+
+	Add test for login mechanism
+	
+2003-01-21 19:15  Graham Barr
+
+	* lib/Authen/SASL.pm:
+
+	Release 2.03
+	
+2003-01-21 12:22  Graham Barr
+
+	* lib/Authen/SASL/Perl/LOGIN.pm:
+
+	Fix LOGIN mechanism to respond with the username when prompted
+	
 2002-05-28 15:22  Graham Barr
 
 	* lib/Authen/SASL.pm:
