@@ -19,7 +19,7 @@ my %secflags = (
 );
 
 # some have to be quoted - some don't - sigh!
-my %qdval; @qdval{qw(username realm nonce cnonce digest-uri)} = ();
+my %qdval; @qdval{qw(username authzid realm nonce cnonce digest-uri)} = ();
 
 sub _order { 3 }
 sub _secflags {
@@ -66,6 +66,11 @@ sub client_step    # $self, $server_sasl_credentials
     charset      => $sparams{'charset'},
   );
 
+  my $authzid = $self->_call('authname');
+  if (defined $authzid) {
+    $response{authzid} = $authzid;
+  }
+
   my $serv_name = $self->_call('serv');
   if (defined $serv_name) {
     $response{'digest_uri'} .= '/' . $serv_name;
@@ -77,7 +82,7 @@ sub client_step    # $self, $server_sasl_credentials
 
   my $A1 = join (":", 
     md5(join (":", @response{qw(username realm)}, $password)),
-    @response{qw(nonce cnonce)}
+    @response{defined($authzid) ? qw(nonce cnonce authzid) : qw(nonce cnonce)}
   );
 
   my $A2 = "AUTHENTICATE:" . $response{'digest-uri'};

@@ -4,16 +4,18 @@ BEGIN {
   eval { require Digest::MD5 }
 }
 
-use Test::More ($Digest::MD5::VERSION ? (tests => 5) : (skip_all => 'Need Digest::MD5'));
+use Test::More ($Digest::MD5::VERSION ? (tests => 6) : (skip_all => 'Need Digest::MD5'));
 
 use Authen::SASL qw(Perl);
+
+my $authname;
 
 my $sasl = Authen::SASL->new(
   mechanism => 'DIGEST-MD5',
   callback => {
     user => 'gbarr',
     pass => 'fred',
-    authname => 'none'
+    authname => sub { $authname },
   },
 );
 ok($sasl,'new');
@@ -32,10 +34,33 @@ $Authen::SASL::Perl::DIGEST_MD5::CNONCE = "foobar";
 $Authen::SASL::Perl::DIGEST_MD5::CNONCE = "foobar"; # avoid used only once warning
 my $initial = $conn->client_step($sparams);
 
+my @expect = qw(
+  charset=utf-8
+  cnonce="3858f62230ac3c915f300c664312c63f"
+  digest-uri="ldap/localhost"
+  nc=00000001
+  nonce="OA6MG9tEQGm2hh"
+  qop=auth
+  realm="elwood.innosoft.com"
+  response=9c81619e12f61fb2eed6bc8ed504ad28
+  username="gbarr"
+);
+
 is(
   $initial,
-  'charset=utf-8,cnonce="3858f62230ac3c915f300c664312c63f",digest-uri="ldap/localhost",nc=00000001,nonce="OA6MG9tEQGm2hh",qop=auth,realm="elwood.innosoft.com",response=9c81619e12f61fb2eed6bc8ed504ad28,username="gbarr"',
+  join(",", @expect),
   'client_step'
+);
+
+$authname = 'meme';
+$initial = $conn->client_step($sparams);
+$expect[3] = 'nc=00000002';
+$expect[7] = 'response=8d8afc5ff9cf3add40e50a5eaabb9aac';
+
+is(
+  $initial,
+  join(",", 'authzid="meme"', @expect),
+  'client_step + authname'
 );
 
 
