@@ -3,6 +3,8 @@ use Authen::SASL;
 
 @Authen::SASL::Plugins = qw(Authen::SASL::Perl);
 
+eval { require Digest::HMAC_MD5 } or print("1..0\n"), exit;
+
 print "1..5\n";
 
 my $sasl = Authen::SASL->new(
