@@ -1,0 +1,55 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.35.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It would check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 59b0b7158559f5f3335bc2a76becae97b19f5bc3 ChangeLog
+SHA1 165483f8b335b58677843cac4bea4183dad44b3b MANIFEST
+SHA1 04079b9d4328501ff17428e1e13d0b480bbebeee META.yml
+SHA1 074cf9d9b7018f679818d0401682f28eb2ac3022 Makefile.PL
+SHA1 5f0157764b661d07d362fc64f5a5a81a0b064974 api.txt
+SHA1 81644069dc4507a71e4cfeef20780fee6c7ee00a compat_pl
+SHA1 fe659c6b2d6041f944072b9aa1e4ff3a49381e36 example_pl
+SHA1 5186e6f4356cb0f3f8ebc7bc185efe58354ee5fe inc/Module/Install.pm
+SHA1 9068d9b0b6d7dcffe538e28acec5e127401ccfca inc/Module/Install/Base.pm
+SHA1 7f13d96cb44fed23c08d75c7bd27e1b77022b832 inc/Module/Install/Can.pm
+SHA1 40922248175f9a0ab2af35cc6a72f3f6d1bda1df inc/Module/Install/Fetch.pm
+SHA1 fc71117237bde3ac82de0da3f986a121f5dc5b3b inc/Module/Install/Makefile.pm
+SHA1 fe8bd5df5785b13e2bf09c5f33d627e1fcda1425 inc/Module/Install/Metadata.pm
+SHA1 d92d9ca9ea8758ad348e828eb45c1f59ef7f4fb5 inc/Module/Install/Win32.pm
+SHA1 a156c16008519129db1f325b00b00477610258ee lib/Authen/SASL.pm
+SHA1 f3764d1e23d04039eaf975a16930c179e024d45c lib/Authen/SASL.pod
+SHA1 76c9a0b3e6ba6201a0e84eb13ce51c1b81df5008 lib/Authen/SASL/CRAM_MD5.pm
+SHA1 ec5ca70880db07636a7c8b576460f1b86d5729bb lib/Authen/SASL/EXTERNAL.pm
+SHA1 849a6db1a37594fc07a27fe535a9cc797e9a5620 lib/Authen/SASL/Perl.pm
+SHA1 34ce84ebb64633afbde84b8069b494cd357b0b94 lib/Authen/SASL/Perl/ANONYMOUS.pm
+SHA1 453c72f5304cf079b660fd1b61fca5cd4535dcbd lib/Authen/SASL/Perl/CRAM_MD5.pm
+SHA1 152273efd080ab0a4424645f1ec69029f67f02fd lib/Authen/SASL/Perl/DIGEST_MD5.pm
+SHA1 6f21ee5aed36a1c934249a2c12a4735efcd3115f lib/Authen/SASL/Perl/EXTERNAL.pm
+SHA1 2acff0e705eebbb481f1dcf4edfdd5566486ba2d lib/Authen/SASL/Perl/LOGIN.pm
+SHA1 f8539e8050750d4ecb3f9a49af55a796f22461f1 lib/Authen/SASL/Perl/PLAIN.pm
+SHA1 bb02cee81f921f6bb0ad99cca320c7553bcf155c t/anon.t
+SHA1 d14b86a2589dd94544d4f86e287885769a925d27 t/callback.t
+SHA1 ce84fce0def9b0142ae5b957f320157f4d5eb1ed t/cram_md5.t
+SHA1 931b0d59a37e99c9be0fc2de3f843d684dd9e712 t/digest_md5.t
+SHA1 00f65a4bbb08299d365468ac73271c9d665e9cad t/external.t
+SHA1 1525f71d522e2344877adc9dce685020c2583aae t/login.t
+SHA1 93af2825ce0b58801235e72aa203dbd143f7b043 t/plain.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.3 (Darwin)
+
+iD8DBQE/kFu1R0BL4gbYw3QRAv6nAJ41ojJ7llus0kwB/GJFwisd3+B0FACglPJV
+aw+Lf6kTUb5ZihfoZu0a1eU=
+=v5Ht
+-----END PGP SIGNATURE-----
