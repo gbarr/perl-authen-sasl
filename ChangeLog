@@ -1,3 +1,33 @@
+2003-10-17 22:12  Graham Barr
+
+	* lib/Authen/SASL.pm:
+
+	Release 2.05
+	
+2003-10-17 22:06  Graham Barr
+
+	* MANIFEST, Makefile.PL:
+
+	use Module::Install to generate Makefile and add SIGNATURE and META.yml
+	
+2003-10-17 21:19  Graham Barr
+
+	* lib/Authen/SASL/Perl/DIGEST_MD5.pm:
+
+	Fix typo
+	
+2003-10-17 21:17  Graham Barr
+
+	* lib/Authen/SASL/: Perl.pm, Perl/DIGEST_MD5.pm:
+
+	Don't call die in DIGEST_MD5, but call set_error and return an empty list
+	
+2003-10-17 21:16  Graham Barr
+
+	* lib/Authen/SASL.pod:
+
+	Update docs to reflect that client_start and client_step return an emtpy list on error
+	
 2003-05-19 22:41  Graham Barr
 
 	* lib/Authen/SASL.pm:
