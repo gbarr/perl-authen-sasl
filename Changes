@@ -1,4 +1,9 @@
-Authen-SASL 1.07 -- Sat Apr 10 09:06:21 BST 2004
+Authen-SASL 2.08 -- Tue May 25 11:24:21 BST 2004
+
+Bug Fixes
+  * Fix the handling of qop in Digest-MD5
+
+Authen-SASL 2.07 -- Sat Apr 10 09:06:21 BST 2004
 
 Bug Fixes
   * Fixed test bug if Digest::HMAC_MD5 was not installed
