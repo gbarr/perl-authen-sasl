@@ -1,0 +1,14 @@
+MANIFEST
+Makefile.PL
+api.txt
+compat_pl
+example_pl
+lib/Authen/SASL.pm
+lib/Authen/SASL.pod
+lib/Authen/SASL/CRAM_MD5.pm
+lib/Authen/SASL/EXTERNAL.pm
+lib/Authen/SASL/Perl.pm
+lib/Authen/SASL/Perl/ANONYMOUS.pm
+lib/Authen/SASL/Perl/CRAM_MD5.pm
+lib/Authen/SASL/Perl/EXTERNAL.pm
+lib/Authen/SASL/Perl/PLAIN.pm
