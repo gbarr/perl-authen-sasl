@@ -1,0 +1,53 @@
+2002-03-31 15:39  Graham Barr
+
+	* lib/Authen/SASL.pm:
+
+	Release 2.01
+	
+2002-03-22 10:13  Graham Barr
+
+	* t/cram_md5.t:
+
+	Skip cram_md5 test if Digest::HMAC_MD5 is not installed
+	
+2002-02-18 16:56  Graham Barr
+
+	* lib/Authen/SASL/Perl.pm:
+
+	Add securesocket to the ::Perl base class.
+	
+2002-01-28 19:52  Graham Barr
+
+	* MANIFEST, lib/Authen/SASL.pm, t/anon.t, t/callback.t,
+	t/cram_md5.t, t/external.t, t/plain.t:
+
+	Add some tests
+	
+2002-01-24 15:21  Graham Barr
+
+	* lib/Authen/SASL/Perl.pm:
+
+	Allow callback to be called on the connection object
+	
+2002-01-24 12:04  Graham Barr
+
+	* MANIFEST, Makefile.PL, api.txt, compat_pl, example_pl,
+	lib/Authen/SASL.pm, lib/Authen/SASL.pod,
+	lib/Authen/SASL/CRAM_MD5.pm, lib/Authen/SASL/EXTERNAL.pm,
+	lib/Authen/SASL/Perl.pm, lib/Authen/SASL/Perl/ANONYMOUS.pm,
+	lib/Authen/SASL/Perl/CRAM_MD5.pm, lib/Authen/SASL/Perl/EXTERNAL.pm,
+	lib/Authen/SASL/Perl/PLAIN.pm:
+
+	Initial revision
+	
+2002-01-24 12:04  Graham Barr
+
+	* MANIFEST, Makefile.PL, api.txt, compat_pl, example_pl,
+	lib/Authen/SASL.pm, lib/Authen/SASL.pod,
+	lib/Authen/SASL/CRAM_MD5.pm, lib/Authen/SASL/EXTERNAL.pm,
+	lib/Authen/SASL/Perl.pm, lib/Authen/SASL/Perl/ANONYMOUS.pm,
+	lib/Authen/SASL/Perl/CRAM_MD5.pm, lib/Authen/SASL/Perl/EXTERNAL.pm,
+	lib/Authen/SASL/Perl/PLAIN.pm:
+
+	import
+	
