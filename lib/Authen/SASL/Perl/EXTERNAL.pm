@@ -1,5 +1,5 @@
 # Copyright (c) 1998-2002 Graham Barr <gbarr@pobox.com> and 2001 Chris Ridd
-# <chris.ridd@messagingdirect.com>.  All rights reserved.  This program
+# <chris.ridd@isode.com>.  All rights reserved.  This program
 # is free software; you can redistribute it and/or modify it under the
 # same terms as Perl itself.
 
