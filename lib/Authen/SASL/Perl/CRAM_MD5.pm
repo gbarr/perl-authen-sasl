@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION @ISA);
 use Digest::HMAC_MD5 qw(hmac_md5_hex);
 
-$VERSION = "1.00";
+$VERSION = "1.03";
 @ISA	 = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -16,6 +16,7 @@ my %secflags = (
 	noanonymous => 1,
 );
 
+sub _order { 2 }
 sub _secflags {
   shift;
   scalar grep { $secflags{$_} } @_;

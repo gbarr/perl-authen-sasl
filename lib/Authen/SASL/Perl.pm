@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION);
 use Carp;
 
-$VERSION = "1.02";
+$VERSION = "1.03";
 
 my %secflags = (
 	noplaintext  => 1,
@@ -27,9 +27,9 @@ sub client_new {
     host     => $host     || '',
   };
 
-  # Dumb selection;
-
-  my @mpkg = grep {
+  my @mpkg = sort {
+    $b->_order <=> $a->_order
+  } grep {
     eval "require $_;" && $_->_secflags(@sec) == @sec
   } map {
     (my $mpkg = __PACKAGE__ . "::$_") =~ s/-/_/g;
@@ -40,6 +40,7 @@ sub client_new {
   $mpkg[0]->_init($self);
 }
 
+sub _order { 0 }
 sub code     { defined(shift->{error}) || 0 }
 sub error    { shift->{error}    }
 sub service  { shift->{service}  }

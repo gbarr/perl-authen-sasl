@@ -7,13 +7,14 @@ package Authen::SASL::Perl::LOGIN;
 use strict;
 use vars qw($VERSION @ISA);
 
-$VERSION = "1.01";
+$VERSION = "1.03";
 @ISA	 = qw(Authen::SASL::Perl);
 
 my %secflags = (
 	noanonymous => 1,
 );
 
+sub _order { 1 }
 sub _secflags {
   shift;
   scalar grep { $secflags{$_} } @_;

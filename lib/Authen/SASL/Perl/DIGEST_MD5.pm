@@ -10,7 +10,7 @@ use strict;
 use vars qw($VERSION @ISA $CNONCE);
 use Digest::MD5 qw(md5_hex md5);
 
-$VERSION = "1.01";
+$VERSION = "1.03";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -21,6 +21,7 @@ my %secflags = (
 # some have to be quoted - some don't - sigh!
 my %qdval; @qdval{qw(username realm nonce cnonce digest-uri qop)} = ();
 
+sub _order { 3 }
 sub _secflags {
   shift;
   scalar grep { $secflags{$_} } @_;
