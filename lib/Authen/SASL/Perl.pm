@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION);
 use Carp;
 
-$VERSION = "1.00";
+$VERSION = "1.01";
 
 my %secflags = (
 	noplaintext  => 1,
@@ -99,6 +99,8 @@ sub _call {
 }
 
 sub _secflags { 0 }
+
+sub securesocket { $_[1] }
 
 1;
 
