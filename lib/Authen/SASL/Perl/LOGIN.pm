@@ -7,7 +7,7 @@ package Authen::SASL::Perl::LOGIN;
 use strict;
 use vars qw($VERSION @ISA);
 
-$VERSION = "1.00";
+$VERSION = "1.01";
 @ISA	 = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -23,7 +23,7 @@ sub mechanism { 'LOGIN' }
 
 sub client_start {
   my $self = shift;
-  $self->_call('user');
+  '';
 }
 
 sub client_step {
@@ -31,7 +31,9 @@ sub client_step {
 
   $string =~ /password/i
     ? $self->_call('pass')
-    : '';
+    : $string =~ /username/i
+      ? $self->_call('user')
+      : '';
 }
 
 1;
