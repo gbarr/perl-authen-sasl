@@ -18,4 +18,5 @@ t/anon.t
 t/callback.t
 t/cram_md5.t
 t/external.t
+t/login.t
 t/plain.t
