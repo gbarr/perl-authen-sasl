@@ -76,12 +76,14 @@ Creates and returns a new connection object.
 
 =item client_start
 
-The initial step to be performed. Returns the initial value to pass to the server.
+The initial step to be performed. Returns the initial value to pass to the server
+or an empty list on error.
 
 =item client_step CHALLENGE
 
 This method is called when a response from the server requires it. CHALLENGE
-is the value from the server. Returns the next value to pass to the server.
+is the value from the server. Returns the next value to pass to the server or an
+empty list on error.
 
 =item property NAME
 
