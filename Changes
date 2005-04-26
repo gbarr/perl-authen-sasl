@@ -1,3 +1,18 @@
+Authen-SASL 2.09 -- Tue Apr 26 06:55:10 CDT 2005
+
+Enhancements
+  * authname support in Authen::SASL::Perl::DIGEST_MD5
+  * flexible plugin selection in Authen::SASL using import()
+     i.e.    use Authen::SASL qw(Authen::SASL::Cyrus);
+  * new documentation for
+    - Authen::SASL::Perl::ANONYMOUS
+    - Authen::SASL::Perl::CRAM_MD5
+    - Authen::SASL::Perl::EXTERNAL
+    - Authen::SASL::Perl::LOGIN
+    - Authen::SASL::Perl::PLAIN
+    - Authen::SASL::Perl
+  * updates in the tests
+
 Authen-SASL 2.08 -- Tue May 25 11:24:21 BST 2004
 
 Bug Fixes

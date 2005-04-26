@@ -11,6 +11,7 @@ lib/Authen/SASL.pod
 lib/Authen/SASL/CRAM_MD5.pm
 lib/Authen/SASL/EXTERNAL.pm
 lib/Authen/SASL/Perl.pm
+lib/Authen/SASL/Perl.pod
 lib/Authen/SASL/Perl/ANONYMOUS.pm
 lib/Authen/SASL/Perl/CRAM_MD5.pm
 lib/Authen/SASL/Perl/DIGEST_MD5.pm
