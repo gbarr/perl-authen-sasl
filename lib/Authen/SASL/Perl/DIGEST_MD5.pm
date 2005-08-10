@@ -1,4 +1,4 @@
-# Copyright (c) 2003 Graham Barr, Djamel Boudjerda, Paul Connolly, Julian Onions and Nexor.
+# Copyright (c) 2003-2005 Graham Barr, Djamel Boudjerda, Paul Connolly, Julian Onions and Nexor.
 # All rights reserved. This program is free software; you can redistribute 
 # it and/or modify it under the same terms as Perl itself.
 
@@ -10,7 +10,7 @@ use strict;
 use vars qw($VERSION @ISA $CNONCE);
 use Digest::MD5 qw(md5_hex md5);
 
-$VERSION = "1.04";
+$VERSION = "1.05";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -73,7 +73,7 @@ sub client_step    # $self, $server_sasl_credentials
 
   my $serv_name = $self->_call('serv');
   if (defined $serv_name) {
-    $response{'digest_uri'} .= '/' . $serv_name;
+    $response{'digest-uri'} .= '/' . $serv_name;
   }
 
   my $password = $self->_call('pass');
@@ -178,8 +178,8 @@ Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 
 =head1 COPYRIGHT 
 
-Copyright (c) 2003 Graham Barr, Djamel Boudjerda, Paul Connolly, Julian Onions
-and Nexor.
+Copyright (c) 2003-2005 Graham Barr, Djamel Boudjerda, Paul Connolly,
+Julian Onions and Nexor.
 All rights reserved. This program is free software; you can redistribute 
 it and/or modify it under the same terms as Perl itself.
 
