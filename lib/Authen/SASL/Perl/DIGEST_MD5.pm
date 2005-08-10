@@ -43,16 +43,24 @@ sub client_step    # $self, $server_sasl_credentials
   while($challenge =~ s/^(?:\s*,)?\s*(\w+)=("([^\\"]+|\\.)*"|[^,]+)\s*//) {
     my ($k, $v) = ($1,$2);
     if ($v =~ /^"(.*)"$/s) {
-      ($v = $1) =~ s/\\//g;
+      ($v = $1) =~ s/\\(.)/$1/g;
     }
     $sparams{$k} = $v;
   }
+  # TODO: detect multiple occurrence of fields: fail when forbidden
 
   return $self->set_error("Bad challenge: '$challenge'")
     if length $challenge;
 
+  # qop in server challenge is optional: if not there "auth" is assumed
   return $self->set_error("Server does not support auth (qop = $sparams{'qop'})")
-    unless grep { /^auth$/ } split(/,/, $sparams{'qop'});
+    if ($sparams{qop} && ! grep { /^auth$/ } split(/,/, $sparams{'qop'}));
+
+  # check required fields in server challenge: nonce, algorithm
+  foreach (qw/nonce algorithm/) {
+    return $self->set_error("Server did not provide required field $_ in challenge")
+      if (!defined $sparams{$_});
+  }
 
   my %response = (
     nonce        => $sparams{'nonce'},
@@ -61,11 +69,13 @@ sub client_step    # $self, $server_sasl_credentials
     nonce        => $sparams{'nonce'},
     cnonce       => md5_hex($CNONCE || join (":", $$, time, rand)),
     'digest-uri' => $self->service . '/' . $self->host,
-    qop          => 'auth',
+    qop          => 'auth',		# we currently support 'auth' only
+    # calc how often the server nonce has been seen; server expects "00000001"
     nc           => sprintf("%08d",     ++$self->{nonce}{$sparams{'nonce'}}),
     charset      => $sparams{'charset'},
   );
 
+  # let caller-provided fields override defaults: authorization ID, service name, realm
   my $authzid = $self->_call('authname');
   if (defined $authzid) {
     $response{authzid} = $authzid;
@@ -75,6 +85,12 @@ sub client_step    # $self, $server_sasl_credentials
   if (defined $serv_name) {
     $response{'digest-uri'} .= '/' . $serv_name;
   }
+
+  my $realm = $self->_call('realm');
+  if (defined $realm) {
+    $response{realm} = $realm;
+  }
+  # else TODO: use one of the realms provided by the server
 
   my $password = $self->_call('pass');
 
@@ -179,7 +195,7 @@ Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 =head1 COPYRIGHT 
 
 Copyright (c) 2003-2005 Graham Barr, Djamel Boudjerda, Paul Connolly,
-Julian Onions and Nexor.
+Julian Onions, Nexor and Peter Marschall.
 All rights reserved. This program is free software; you can redistribute 
 it and/or modify it under the same terms as Perl itself.
 
