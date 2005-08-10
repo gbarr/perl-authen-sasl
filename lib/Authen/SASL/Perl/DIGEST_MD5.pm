@@ -178,6 +178,11 @@ The password to be used in the response
 
 The service name when authenticating to a replicated service
 
+=item realm
+
+The authentication realm when overriding the server-provided default.
+If not given the server-provided value is used.
+
 =back
 
 =head1 SEE ALSO
