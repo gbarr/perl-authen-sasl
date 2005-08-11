@@ -115,6 +115,10 @@ This method is called when a response from the server requires it. CHALLENGE
 is the value from the server. Returns the next value to pass to the server or an
 empty list on error.
 
+=item answer NAME
+
+The method will return the value returned from the last call to the callback NAME
+
 =item property NAME
 
 =item property NAME => VALUE, NAME => VALUE
@@ -142,7 +146,8 @@ There are three different ways in which a callback may be passed
 =item CODEREF
 
 If the value passed is a code reference then, when needed, it will be called
-and the connection object will be passed as the first argument.
+and the connection object will be passed as the first argument. In addition
+some callbacks may be passed additional arguments.
 
 =item ARRAYREF
 
@@ -172,7 +177,7 @@ Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 
 =head1 COPYRIGHT
 
-Copyright (c) 1998-2004 Graham Barr. All rights reserved. This program is
+Copyright (c) 1998-2005 Graham Barr. All rights reserved. This program is
 free software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 

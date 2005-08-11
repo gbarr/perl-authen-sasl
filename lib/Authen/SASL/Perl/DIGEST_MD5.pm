@@ -203,6 +203,9 @@ The service name when authenticating to a replicated service
 The authentication realm when overriding the server-provided default.
 If not given the server-provided value is used.
 
+The callback will be passed the list of realms that the server provided
+in the initial response.
+
 =back
 
 =head1 SEE ALSO
