@@ -90,20 +90,36 @@ sub _init {
 }
 
 sub _call {
-  my ($self, $name) = @_;
+  my ($self, $name) = splice(@_,0,2);
 
   my $cb = $self->{callback}{$name};
+
+  return undef unless defined $cb;
+
+  my $value;
 
   if (ref($cb) eq 'ARRAY') {
     my @args = @$cb;
     $cb = shift @args;
-    return $cb->($self, @args);
+    $value = $cb->($self, @args);
   }
   elsif (ref($cb) eq 'CODE') {
-    return $cb->($self);
+    $value = $cb->($self, @_);
+  }
+  else {
+    $value = $cb;
   }
 
-  return $cb;
+  $self->{answer}{$name} = $value
+    unless $name eq 'pass'; # Do not store password
+
+  return $value;
+}
+
+# TODO: Need a better name than this
+sub answer {
+  my ($self, $name) = @_;
+  $self->{answer}{$name};
 }
 
 sub _secflags { 0 }

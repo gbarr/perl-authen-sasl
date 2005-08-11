@@ -21,6 +21,9 @@ my %secflags = (
 # some have to be quoted - some don't - sigh!
 my %qdval; @qdval{qw(username authzid realm nonce cnonce digest-uri)} = ();
 
+my %multi; @multi{qw(realm auth-param)} = ();
+my @required = qw(algorithm nonce);
+
 sub _order { 3 }
 sub _secflags {
   shift;
@@ -45,9 +48,17 @@ sub client_step    # $self, $server_sasl_credentials
     if ($v =~ /^"(.*)"$/s) {
       ($v = $1) =~ s/\\(.)/$1/g;
     }
-    $sparams{$k} = $v;
+    if (exists $multi{$k}) {
+      my $aref = $sparams{$k} ||= [];
+      push @$aref, $v;
+    }
+    elsif (defined $sparams{$k}) {
+      return $self->set_error("Bad challenge: '$challenge'");
+    }
+    else {
+      $sparams{$k} = $v;
+    }
   }
-  # TODO: detect multiple occurrence of fields: fail when forbidden
 
   return $self->set_error("Bad challenge: '$challenge'")
     if length $challenge;
@@ -56,16 +67,12 @@ sub client_step    # $self, $server_sasl_credentials
   return $self->set_error("Server does not support auth (qop = $sparams{'qop'})")
     if ($sparams{qop} && ! grep { /^auth$/ } split(/,/, $sparams{'qop'}));
 
-  # check required fields in server challenge: nonce, algorithm
-  foreach (qw/nonce algorithm/) {
-    return $self->set_error("Server did not provide required field $_ in challenge")
-      if (!defined $sparams{$_});
+  # check required fields in server challenge
+  if (my @missing = grep { !exists $sparams{$_} } @required) {
+    return $self->set_error("Server did not provide required field(s): @missing")
   }
 
   my %response = (
-    nonce        => $sparams{'nonce'},
-    username     => $self->_call('user'),
-    realm        => $sparams{'realm'},
     nonce        => $sparams{'nonce'},
     cnonce       => md5_hex($CNONCE || join (":", $$, time, rand)),
     'digest-uri' => $self->service . '/' . $self->host,
@@ -76,6 +83,17 @@ sub client_step    # $self, $server_sasl_credentials
   );
 
   # let caller-provided fields override defaults: authorization ID, service name, realm
+
+  my $s_realm = $sparams{realm} || [];
+  my $realm = $self->_call('realm', @$s_realm);
+  unless (defined $realm) {
+    # If the user does not pick a realm, use the first from the server
+    $realm = $s_realm->[0];
+  }
+  if (defined $realm) {
+    $response{realm} = $realm;
+  }
+
   my $authzid = $self->_call('authname');
   if (defined $authzid) {
     $response{authzid} = $authzid;
@@ -86,18 +104,20 @@ sub client_step    # $self, $server_sasl_credentials
     $response{'digest-uri'} .= '/' . $serv_name;
   }
 
-  my $realm = $self->_call('realm');
-  if (defined $realm) {
-    $response{realm} = $realm;
-  }
-  # else TODO: use one of the realms provided by the server
+  my $user = $self->_call('user');
+  return $self->set_error("Username is required")
+    unless defined $user;
+  $response{username} = $user;
 
   my $password = $self->_call('pass');
+  return $self->set_error("Password is required")
+    unless defined $password;
 
   # Generate the response value
 
+  $realm = "" unless defined $realm;
   my $A1 = join (":", 
-    md5(join (":", @response{qw(username realm)}, $password)),
+    md5(join (":", $user, $realm, $password)),
     @response{defined($authzid) ? qw(nonce cnonce authzid) : qw(nonce cnonce)}
   );
 
