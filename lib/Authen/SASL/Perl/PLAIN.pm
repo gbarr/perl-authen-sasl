@@ -85,7 +85,7 @@ L<Authen::SASL>,
 L<Authen::SASL::Perl>
 
 =head1 AUTHORS
- 
+
 Software written by Graham Barr <gbarr@pobox.com>,
 documentation written by Peter Marschall <peter@adpm.de>.
 

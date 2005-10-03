@@ -173,7 +173,7 @@ only support by Authen::SASL::Cyrus)
 Graham Barr <gbarr@pobox.com>
 
 Please report any bugs, or post any suggestions, to the perl-ldap mailing list
-<perl-ldap-dev@lists.sourceforge.net>
+<perl-ldap@perl.org>
 
 =head1 COPYRIGHT
 
