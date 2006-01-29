@@ -9,11 +9,29 @@ author		('Graham Barr <gbarr@pobox.com>');
 version_from	('lib/Authen/SASL.pm');
 license		('perl');
 
+check_nmake();      # check and download nmake.exe for Win32
+
 requires	( perl => 5.005 );
 
 include_deps	('Test::More');
+include 	('ExtUtils::AutoInstall');
 
-check_nmake();      # check and download nmake.exe for Win32
+features(
+  'DIGEST-MD5 mechanism' => [
+    -default => 1,
+    'Digest::MD5'  => 0,
+  ],
+  'CRAM-MD5 mechanism' => [
+    -default => 0,
+    'Digest::HMAC_MD5'  => 0,
+  ],
+  'GSSAPI mechanism' => [
+    -default => 0,
+    'GSSAPI'  => 0,
+  ],
+);
+
+auto_install_now();
 
 &Makefile->write;
 &Meta->write;
