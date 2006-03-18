@@ -30,10 +30,15 @@ sub client_start {
   my $status;
   my $principal = $self->service.'@'.$self->host;
 
-  $self->{gss_name} = new GSSAPI::Name;
-  $status = $self->{gss_name}->import($self->{gss_name}, $principal, 
+  # GSSAPI::Name->import is the *constructor*,
+  # storing the new GSSAPI::Name into $target.
+  # GSSAPI::Name->import is not the standard
+  # import() method as used in Perl normally
+  my $target;
+  $status = GSSAPI::Name->import($target, $principal, 
 				      gss_nt_service_name)
     or return $self->set_error("GSSAPI Error : ".$status);
+  $self->{gss_name} = $target;
   $self->{gss_ctx} = new GSSAPI::Context;
   $self->{gss_state} = 0;
   return $self->client_step("");
@@ -48,10 +53,10 @@ sub client_step
   if ($self->{gss_state}==0) {
     my $outtok;
     my $flags;
-    $status = $self->{gss_ctx}->init(undef, $self->{gss_name}, 
+    $status = $self->{gss_ctx}->init(GSS_C_NO_CREDENTIAL, $self->{gss_name}, 
 				     gss_mech_krb5, 
 				     GSS_C_INTEG_FLAG | GSS_C_MUTUAL_FLAG, 
-				     undef, undef, $challenge, undef, 
+				     0, GSS_C_NO_CHANNEL_BINDINGS, $challenge, undef, 
 				     $outtok, $flags, undef);
 
     if (GSSAPI::Status::GSS_ERROR($status->major)) {
@@ -75,9 +80,9 @@ sub client_step
 
     # Need to set message to be 0x01, 0x00, 0x00, 0x00 for no security layers
     my $message = pack('CCCC', 0x01, 0x00, 0x00, 0x00);
-    $message.= $self->_call('user');
+    $message.= $self->_call('user') if ( $self->_call('user') ) ;
     my $outtok;
-    $status = $self->{gss_ctx}->wrap(0, undef, $message, undef, $outtok)
+    $status = $self->{gss_ctx}->wrap(0, 0, $message, undef, $outtok)
       or return $self->set_error("GSSAPI Error : ".$status);
     
     $self->{gss_state}=0;
