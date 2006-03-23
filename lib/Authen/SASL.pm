@@ -1,4 +1,4 @@
-# Copyright (c) 2004 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# Copyright (c) 2004-2006 Graham Barr <gbarr@pobox.com>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION @Plugins);
 use Carp;
 
-$VERSION = "2.09";
+$VERSION = "2.10";
 
 @Plugins = qw(
 	Authen::SASL::Cyrus
@@ -87,6 +87,11 @@ sub server_new { # $self, $service, $host, $secflags
     }
   }
   croak "Cannot find a SASL Connection library for server-side authentication";
+}
+
+sub error {
+  my $self = shift;
+  $self->{conn} && $self->{conn}->error;
 }
 
 # Compat.

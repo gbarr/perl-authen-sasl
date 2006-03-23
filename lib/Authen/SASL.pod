@@ -86,6 +86,10 @@ Creates and returns a new connection object for a client-side connection.
 Creates and returns a new connection object for a server-side connection.
 Currently only supported by L<Authen::SASL::Cyrus>.
 
+=item error
+
+Returns any error from the last connection
+
 =back
 
 =head1 The Connection Class
