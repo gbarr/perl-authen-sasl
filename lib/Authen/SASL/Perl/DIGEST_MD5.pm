@@ -171,7 +171,7 @@ Authen::SASL::Perl::DIGEST_MD5 - Digest MD5 Authentication class
 =head1 DESCRIPTION
 
 This method implements the client part of the DIGEST-MD5 SASL algorithm,
-as described in RFC-2831.
+as described in RFC 2831.
 
 This module only implements the I<auth> operation which offers authentication
 but neither integrity protection not encryption.

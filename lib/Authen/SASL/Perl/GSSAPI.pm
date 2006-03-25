@@ -113,7 +113,8 @@ Authen::SASL::Perl::GSSAPI - GSSAPI (Kerberosv5) Authentication class
 
 =head1 DESCRIPTION
 
-This method implements the client part of the GSSAPI SASL algorithm.
+This method implements the client part of the GSSAPI SASL algorithm,
+as described in RFC 2222 resp. draft-ietf-sasl-gssapi-XX.txt.
 
 With a valid Kerberos 5 credentials cache (aka TGT) it allows
 to connect to I<service>@I<host> given as the first two parameters
@@ -133,7 +134,7 @@ The callbacks used are:
 
 =item user
 
-The username to be used in the response
+The username to be used for authentication
 
 =back
 
