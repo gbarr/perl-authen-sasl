@@ -215,7 +215,7 @@ L<Authen::SASL::Perl>
 
 =head1 AUTHORS
 
-Graham Barr, Djamel Boudjerda (NEXOR) Paul Connolly, Julian Onions (NEXOR)
+Graham Barr, Djamel Boudjerda (NEXOR), Paul Connolly, Julian Onions (NEXOR)
 
 Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 <perl-ldap@perl.org>
