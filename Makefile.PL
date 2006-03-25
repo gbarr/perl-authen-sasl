@@ -36,17 +36,3 @@ auto_install_now();
 &Makefile->write;
 &Meta->write;
 
-## - - - - - - - -
-
-sub MY::postamble {
-  return <<'POSTAMBLE';
-
-distdir : manifest run_cpansign
-
-run_cpansign :
-	cpansign -s
-
-POSTAMBLE
-
-}
-

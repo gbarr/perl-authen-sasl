@@ -1,11 +1,20 @@
-Changes
-MANIFEST
-META.yml
-Makefile.PL
-SIGNATURE
 api.txt
+Changes
 compat_pl
 example_pl
+inc/ExtUtils/AutoInstall.pm
+inc/Module/AutoInstall.pm
+inc/Module/Install.pm
+inc/Module/Install/AutoInstall.pm
+inc/Module/Install/Base.pm
+inc/Module/Install/Can.pm
+inc/Module/Install/Fetch.pm
+inc/Module/Install/Include.pm
+inc/Module/Install/Makefile.pm
+inc/Module/Install/Metadata.pm
+inc/Module/Install/Win32.pm
+inc/Test/Builder.pm
+inc/Test/More.pm
 lib/Authen/SASL.pm
 lib/Authen/SASL.pod
 lib/Authen/SASL/CRAM_MD5.pm
@@ -19,6 +28,10 @@ lib/Authen/SASL/Perl/EXTERNAL.pm
 lib/Authen/SASL/Perl/GSSAPI.pm
 lib/Authen/SASL/Perl/LOGIN.pm
 lib/Authen/SASL/Perl/PLAIN.pm
+Makefile.PL
+MANIFEST			This list of files
+META.yml
+SIGNATURE
 t/anon.t
 t/callback.t
 t/cram_md5.t
