@@ -109,12 +109,10 @@ Authen::SASL::Perl::GSSAPI - GSSAPI (Kerberosv5) Authentication class
 
   $sasl = Authen::SASL->new( mechanism => 'GSSAPI' );
 
-  $sasl->client_start( $service, $host );
-
 =head1 DESCRIPTION
 
 This method implements the client part of the GSSAPI SASL algorithm,
-as described in RFC 2222 resp. draft-ietf-sasl-gssapi-XX.txt.
+as described in RFC 2222 section 7.2.1 resp. draft-ietf-sasl-gssapi-XX.txt.
 
 With a valid Kerberos 5 credentials cache (aka TGT) it allows
 to connect to I<service>@I<host> given as the first two parameters
