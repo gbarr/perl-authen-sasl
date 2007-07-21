@@ -10,7 +10,7 @@ use strict;
 use vars qw($VERSION @ISA $CNONCE);
 use Digest::MD5 qw(md5_hex md5);
 
-$VERSION = "1.05";
+$VERSION = "1.05_1";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -43,7 +43,7 @@ sub client_step    # $self, $server_sasl_credentials
   $self->{server_params} = \my %sparams;
 
   # Parse response parameters
-  while($challenge =~ s/^(?:\s*,)?\s*(\w+)=("([^\\"]+|\\.)*"|[^,]+)\s*//) {
+  while($challenge =~ s/^(?:\s*,)*\s*(\w+)=("([^\\"]+|\\.)*"|[^,]+)\s*(?:,\s*)*//) {
     my ($k, $v) = ($1,$2);
     if ($v =~ /^"(.*)"$/s) {
       ($v = $1) =~ s/\\(.)/$1/g;
