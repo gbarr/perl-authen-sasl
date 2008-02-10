@@ -33,6 +33,7 @@ sub new {
   my $self = bless {
     mechanism => $opt{mechanism} || $opt{mech},
     callback  => {},
+    debug => $opt{debug},
   }, $pkg;
 
   $self->callback(%{$opt{callback}}) if ref($opt{callback}) eq 'HASH';
