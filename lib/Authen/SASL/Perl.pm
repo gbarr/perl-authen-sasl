@@ -274,6 +274,8 @@ sub securesocket {
 
     my $fh = $self->{fh};
 
+    $offset |= 0;	# keep substr() happy
+
     # put on wire in peer-sized chunks
     my $bsz = $self->{sndbufsz};
     while ($len > 0) {
