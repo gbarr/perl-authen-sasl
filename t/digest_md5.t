@@ -4,7 +4,7 @@ BEGIN {
   eval { require Digest::MD5 }
 }
 
-use Test::More ($Digest::MD5::VERSION ? (tests => 6) : (skip_all => 'Need Digest::MD5'));
+use Test::More ($Digest::MD5::VERSION ? (tests => 9) : (skip_all => 'Need Digest::MD5'));
 
 use Authen::SASL qw(Perl);
 
@@ -49,18 +49,39 @@ my @expect = qw(
 is(
   $initial,
   join(",", @expect),
-  'client_step'
+  'client_step [1]'
 );
+
+my $response='rspauth=d1273170c120bae49cea49de9b4c5bdc';
+$initial = $conn->client_step($response);
+
+is(
+  $initial,
+  '',
+  'client_step [2]'
+);
+
+# .. .and now everything with an authname
+is($conn->client_start, '', 'client_start');
 
 $authname = 'meme';
 $initial = $conn->client_step($sparams);
+
 $expect[3] = 'nc=00000002';
 $expect[7] = 'response=8d8afc5ff9cf3add40e50a5eaabb9aac';
 
 is(
   $initial,
   join(",", 'authzid="meme"', @expect),
-  'client_step + authname'
+  'client_step + authname [1]'
 );
 
+$response='rspauth=dcb2b36dcd0750d3a7d0482fe1872769';
+$initial = $conn->client_step($response);
+
+is(
+  $initial,
+  '',
+  'client_step + authname [2]'
+);
 
