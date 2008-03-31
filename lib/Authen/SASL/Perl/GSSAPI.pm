@@ -263,7 +263,6 @@ The GSS mechanism to be used in the connection
 
 The GSS credentials to be used in the connection (optional)
 
-
 =back
 
 
@@ -283,7 +282,7 @@ The GSS credentials to be used in the connection (optional)
 
  my $sasl = Authen::SASL->new(mechanism => 'GSSAPI');
  my $ldap;
- 
+
  eval {
      $ldap = Net::LDAP->new($adhost,
                             onerror => 'die')
@@ -324,6 +323,11 @@ The default is 0
 
 The maximum SSF value that should be provided by the SASL security layer.
 The default is 2**31
+
+=item externalssf
+
+The SSF value provided by an underlying external security layer.
+The default is 0
 
 =item ssf
 

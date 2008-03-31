@@ -339,6 +339,46 @@ in the initial response.
 
 =back
 
+=head2 PROPERTIES
+
+The properties used are:
+
+=over 4
+
+=item maxbuf
+
+The maximum buffer size for receiving cipher text
+
+=item minssf
+
+The minimum SSF value that should be provided by the SASL security layer.
+The default is 0
+
+=item maxssf
+
+The maximum SSF value that should be provided by the SASL security layer.
+The default is 2**31
+
+=item externalssf
+
+The SSF value provided by an underlying external security layer.
+The default is 0
+
+=item ssf
+
+The actual SSF value provided by the SASL security layer after the SASL
+authentication phase has been completed. This value is read-only and set
+by the implementation after the SASL authentication phase has been completed.
+
+=item maxout
+
+The maximum plaintext buffer size for sending data to the peer.
+This value is set by the implementation after the SASL authentication
+phase has been completed and a SASL security layer is in effect.
+
+=back
+
+
 =head1 SEE ALSO
 
 L<Authen::SASL>,
