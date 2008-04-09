@@ -11,7 +11,7 @@ license		('perl');
 
 check_nmake();      # check and download nmake.exe for Win32
 
-requires	( perl => 5.005 );
+perl_version    5.005;
 
 include_deps	('Test::More');
 include 	('ExtUtils::AutoInstall');
