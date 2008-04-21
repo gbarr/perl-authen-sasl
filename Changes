@@ -1,3 +1,13 @@
+Authen-SASL 2.11 -- Mon Apr 21 10:23:19 CDT 2008
+
+Enhancements
+  * implement securesocket() in the ::Perl set of plugins
+
+Bug Fixes
+  * fix parsing challenges from GnuSASL
+  * update tests for DIGEST-MD5
+  * New test from Phil Pennock for testing final server response
+
 Authen-SASL 2.10 -- Sat Mar 25 13:11:47 CST 2006
 
 Enhancements

@@ -11,7 +11,7 @@ use vars qw($VERSION @ISA $CNONCE);
 use Digest::MD5 qw(md5_hex md5);
 use Digest::HMAC_MD5 qw(hmac_md5);
 
-$VERSION = "1.05_1";
+$VERSION = "1.06";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (

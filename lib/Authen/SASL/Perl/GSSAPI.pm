@@ -9,7 +9,7 @@ use strict;
 use vars qw($VERSION @ISA);
 use GSSAPI;
 
-$VERSION= "0.02";
+$VERSION= "0.03";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
