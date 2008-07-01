@@ -14,95 +14,54 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 19a789a5b3eb3a8130884bb25d70c94689a5a7de Authen-SASL-2.11/Changes
-SHA1 10d139cbb9794f908248793c6f319b181e1862cd Authen-SASL-2.11/MANIFEST
-SHA1 3c3a9cfeab84bec2c2d4713d6e737f0d3617425f Authen-SASL-2.11/META.yml
-SHA1 df195fc13c9d28b1f1d6cb89bd70e560e8d3f046 Authen-SASL-2.11/Makefile.PL
-SHA1 04cdc8787385997a71008adc1d8a3c4003016031 Authen-SASL-2.11/SIGNATURE
-SHA1 5f0157764b661d07d362fc64f5a5a81a0b064974 Authen-SASL-2.11/api.txt
-SHA1 81644069dc4507a71e4cfeef20780fee6c7ee00a Authen-SASL-2.11/compat_pl
-SHA1 fe659c6b2d6041f944072b9aa1e4ff3a49381e36 Authen-SASL-2.11/example_pl
-SHA1 603bb9de29fb8cba7f13409c546750972eff645d Authen-SASL-2.11/inc/Module/AutoInstall.pm
-SHA1 d8f6d2df4e75cb9e6e77a8377457f0ececd00e31 Authen-SASL-2.11/inc/Module/Install.pm
-SHA1 af0833ed8863138d63c446ab756b868d9ec1a8da Authen-SASL-2.11/inc/Module/Install/AutoInstall.pm
-SHA1 03590cde5c3de0d0d8a84d2b96917ed1a2cf9a30 Authen-SASL-2.11/inc/Module/Install/Base.pm
-SHA1 8ef3c70e905be7d1007b446f21d4eb3ff6ae24cb Authen-SASL-2.11/inc/Module/Install/Can.pm
-SHA1 79054604a1cd4e99443b05cbb62832568a204a33 Authen-SASL-2.11/inc/Module/Install/Fetch.pm
-SHA1 160e1fc7baca4f31c50fe498df10280c9a218ada Authen-SASL-2.11/inc/Module/Install/Include.pm
-SHA1 dfa433f2f41d990946f1b3d68a29299539f2dea6 Authen-SASL-2.11/inc/Module/Install/Makefile.pm
-SHA1 72cab336b6be5716aae0a1cb6d9add6c98a7a1f5 Authen-SASL-2.11/inc/Module/Install/Metadata.pm
-SHA1 35a62725a7eade0fa617ef2ba4cf2f4d4a69a3fe Authen-SASL-2.11/inc/Module/Install/Win32.pm
-SHA1 578c9d7e249fae1d20b989a1cc18da461843b61e Authen-SASL-2.11/inc/Test/Builder.pm
-SHA1 9ceb21c6c29c6857f63ddfa580cedb776e7d403d Authen-SASL-2.11/inc/Test/Builder/Module.pm
-SHA1 0fc9342c11d50218dfa2a71aee7443af26c99177 Authen-SASL-2.11/inc/Test/More.pm
-SHA1 f257b95a8543fcbd5045c6de7d0ce7d5bb141c09 Authen-SASL-2.11/lib/Authen/SASL.pm
-SHA1 a7a6cb2b7f4fe90ec980aed61802fe4e345e5288 Authen-SASL-2.11/lib/Authen/SASL.pod
-SHA1 76c9a0b3e6ba6201a0e84eb13ce51c1b81df5008 Authen-SASL-2.11/lib/Authen/SASL/CRAM_MD5.pm
-SHA1 ec5ca70880db07636a7c8b576460f1b86d5729bb Authen-SASL-2.11/lib/Authen/SASL/EXTERNAL.pm
-SHA1 4bc00fedb3f4fc28d0bd43d3e63479c9aa403b9f Authen-SASL-2.11/lib/Authen/SASL/Perl.pm
-SHA1 6992fb64815f759404a0b4e67e53fe6296a6c8e0 Authen-SASL-2.11/lib/Authen/SASL/Perl.pod
-SHA1 8fc746203af4e4447b3d1344153bd8f8fa4c568b Authen-SASL-2.11/lib/Authen/SASL/Perl/ANONYMOUS.pm
-SHA1 d1dbf799365c42c1bd8f8083a2a1dde0da541bcf Authen-SASL-2.11/lib/Authen/SASL/Perl/CRAM_MD5.pm
-SHA1 724a0ce9c43636d383071733abff8281d3eae84f Authen-SASL-2.11/lib/Authen/SASL/Perl/DIGEST_MD5.pm
-SHA1 2bbac374513b11a9e0b8e90fc16fc9d09e05baff Authen-SASL-2.11/lib/Authen/SASL/Perl/EXTERNAL.pm
-SHA1 a228f8f634e242e88349ed9d9deb6ced70365355 Authen-SASL-2.11/lib/Authen/SASL/Perl/GSSAPI.pm
-SHA1 63f1286d46e6a5b59e7c74d0f048d10beda55939 Authen-SASL-2.11/lib/Authen/SASL/Perl/LOGIN.pm
-SHA1 68a91cc6ec6f9afb4493eab87b82e714728bdc29 Authen-SASL-2.11/lib/Authen/SASL/Perl/PLAIN.pm
-SHA1 be0c439da3f8f1740fa8b623cee9662946a62c3f Authen-SASL-2.11/t/anon.t
-SHA1 2f0bc82458a42b9b2e9cf5792abb1611ee2fc2e7 Authen-SASL-2.11/t/callback.t
-SHA1 b638f32f3215163b607c509a55026bafa5c5edfc Authen-SASL-2.11/t/cram_md5.t
-SHA1 8e6d5e5b34f7746d7514fbde23c4f7193a7255ed Authen-SASL-2.11/t/digest_md5.t
-SHA1 9a52fb1ed7aa1365f7996805eb4c05440c274a6e Authen-SASL-2.11/t/digest_md5_verified.t
-SHA1 d3ccc7e4331dd867d6af39c8fde420b33afd21a1 Authen-SASL-2.11/t/external.t
-SHA1 5ee2d46cf9db2d059fb0e6525cd92493e4e0fe65 Authen-SASL-2.11/t/login.t
-SHA1 6a6c9fa037cdaf24091524cc399f9cc799547732 Authen-SASL-2.11/t/order.t
-SHA1 0c80dacffa7e1ae386ae6023f58a5562433e3587 Authen-SASL-2.11/t/plain.t
-SHA1 19a789a5b3eb3a8130884bb25d70c94689a5a7de Changes
-SHA1 7ed2a805a7a602a3968775bc9b20e6b49951a66d MANIFEST
-SHA1 3c3a9cfeab84bec2c2d4713d6e737f0d3617425f META.yml
-SHA1 df195fc13c9d28b1f1d6cb89bd70e560e8d3f046 Makefile.PL
+SHA1 4c48401da9c997e33bfe5b6d2f0f8ec65a19b99c .gitignore
+SHA1 ed040f32b0b798b956b5ef15624b13497e91af06 Changes
+SHA1 7a03dacaaebee023467d9013ef6e5165c88cab20 MANIFEST
+SHA1 05bcd8f2d0886c6f99f6a8220b64889cbd1791ee META.yml
+SHA1 cee71efffc41b2b3304ff2bf2f7a872631644587 Makefile.PL
 SHA1 5f0157764b661d07d362fc64f5a5a81a0b064974 api.txt
 SHA1 81644069dc4507a71e4cfeef20780fee6c7ee00a compat_pl
 SHA1 fe659c6b2d6041f944072b9aa1e4ff3a49381e36 example_pl
 SHA1 603bb9de29fb8cba7f13409c546750972eff645d inc/Module/AutoInstall.pm
-SHA1 d8f6d2df4e75cb9e6e77a8377457f0ececd00e31 inc/Module/Install.pm
-SHA1 af0833ed8863138d63c446ab756b868d9ec1a8da inc/Module/Install/AutoInstall.pm
-SHA1 03590cde5c3de0d0d8a84d2b96917ed1a2cf9a30 inc/Module/Install/Base.pm
-SHA1 8ef3c70e905be7d1007b446f21d4eb3ff6ae24cb inc/Module/Install/Can.pm
-SHA1 79054604a1cd4e99443b05cbb62832568a204a33 inc/Module/Install/Fetch.pm
-SHA1 160e1fc7baca4f31c50fe498df10280c9a218ada inc/Module/Install/Include.pm
-SHA1 dfa433f2f41d990946f1b3d68a29299539f2dea6 inc/Module/Install/Makefile.pm
-SHA1 72cab336b6be5716aae0a1cb6d9add6c98a7a1f5 inc/Module/Install/Metadata.pm
-SHA1 35a62725a7eade0fa617ef2ba4cf2f4d4a69a3fe inc/Module/Install/Win32.pm
-SHA1 578c9d7e249fae1d20b989a1cc18da461843b61e inc/Test/Builder.pm
-SHA1 9ceb21c6c29c6857f63ddfa580cedb776e7d403d inc/Test/Builder/Module.pm
-SHA1 0fc9342c11d50218dfa2a71aee7443af26c99177 inc/Test/More.pm
-SHA1 f257b95a8543fcbd5045c6de7d0ce7d5bb141c09 lib/Authen/SASL.pm
+SHA1 f0577f8f88a6703e9bca2d10196cfd293f3d6f2f inc/Module/Install.pm
+SHA1 b2a2c9b6cb4b1bcd119825acc707f45946d8b126 inc/Module/Install/AutoInstall.pm
+SHA1 5d574849849860b8cf06035cc6f1a306c66cb326 inc/Module/Install/Base.pm
+SHA1 c30f50bc2a1542dff17f84a54d9316f3c3c6299e inc/Module/Install/Can.pm
+SHA1 9b618efcd783f6ed4bab84fa22b31886fcc38d57 inc/Module/Install/Fetch.pm
+SHA1 808d4b2d764185a34c89e675bb4eaad18c075b14 inc/Module/Install/Include.pm
+SHA1 cd14c8de2a67b0f14df9bc20c27f3edabd359d1b inc/Module/Install/Makefile.pm
+SHA1 a2162aec678d21988fce47ab805cf01773196292 inc/Module/Install/Metadata.pm
+SHA1 4ae5d56e11e640bd9520634dde6d563926f6d98a inc/Module/Install/Win32.pm
+SHA1 f0ebc594cf8ba858ee9a840c344d9b7ea2c3c6f4 inc/Test/Builder.pm
+SHA1 6bb30e9867f6dbcada80acca07cb727fa09fc3a0 inc/Test/Builder/Module.pm
+SHA1 07c750f370de7a44ee7b0ed9ec30a7e89c24c9b9 inc/Test/More.pm
+SHA1 a3b43f30a4aa19adb8cda1ceaf5b19da0a5e1cae inc/attributes.pm
+SHA1 9827bb81880f2e2322009e31e26e4d187202d535 lib/Authen/SASL.pm
 SHA1 a7a6cb2b7f4fe90ec980aed61802fe4e345e5288 lib/Authen/SASL.pod
 SHA1 76c9a0b3e6ba6201a0e84eb13ce51c1b81df5008 lib/Authen/SASL/CRAM_MD5.pm
 SHA1 ec5ca70880db07636a7c8b576460f1b86d5729bb lib/Authen/SASL/EXTERNAL.pm
-SHA1 4bc00fedb3f4fc28d0bd43d3e63479c9aa403b9f lib/Authen/SASL/Perl.pm
+SHA1 98868b8a5d4c7d574353cb62251026feda5cf007 lib/Authen/SASL/Perl.pm
 SHA1 6992fb64815f759404a0b4e67e53fe6296a6c8e0 lib/Authen/SASL/Perl.pod
 SHA1 8fc746203af4e4447b3d1344153bd8f8fa4c568b lib/Authen/SASL/Perl/ANONYMOUS.pm
 SHA1 d1dbf799365c42c1bd8f8083a2a1dde0da541bcf lib/Authen/SASL/Perl/CRAM_MD5.pm
-SHA1 724a0ce9c43636d383071733abff8281d3eae84f lib/Authen/SASL/Perl/DIGEST_MD5.pm
+SHA1 169f56765be6b4aa5c596b078da7d3885d69d344 lib/Authen/SASL/Perl/DIGEST_MD5.pm
 SHA1 2bbac374513b11a9e0b8e90fc16fc9d09e05baff lib/Authen/SASL/Perl/EXTERNAL.pm
-SHA1 a228f8f634e242e88349ed9d9deb6ced70365355 lib/Authen/SASL/Perl/GSSAPI.pm
+SHA1 6a27f432bf6d694043befffce9453a4b2203b84a lib/Authen/SASL/Perl/GSSAPI.pm
 SHA1 63f1286d46e6a5b59e7c74d0f048d10beda55939 lib/Authen/SASL/Perl/LOGIN.pm
 SHA1 68a91cc6ec6f9afb4493eab87b82e714728bdc29 lib/Authen/SASL/Perl/PLAIN.pm
 SHA1 be0c439da3f8f1740fa8b623cee9662946a62c3f t/anon.t
 SHA1 2f0bc82458a42b9b2e9cf5792abb1611ee2fc2e7 t/callback.t
 SHA1 b638f32f3215163b607c509a55026bafa5c5edfc t/cram_md5.t
-SHA1 8e6d5e5b34f7746d7514fbde23c4f7193a7255ed t/digest_md5.t
-SHA1 9a52fb1ed7aa1365f7996805eb4c05440c274a6e t/digest_md5_verified.t
+SHA1 06807509ff341e48a01c4260f64a1e7b17b4c7eb t/digest_md5.t
+SHA1 7a52a9574b75c55d663de86edaf6b64d5f2a5814 t/digest_md5_verified.t
 SHA1 d3ccc7e4331dd867d6af39c8fde420b33afd21a1 t/external.t
 SHA1 5ee2d46cf9db2d059fb0e6525cd92493e4e0fe65 t/login.t
 SHA1 6a6c9fa037cdaf24091524cc399f9cc799547732 t/order.t
 SHA1 0c80dacffa7e1ae386ae6023f58a5562433e3587 t/plain.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.1 (Darwin)
+Version: GnuPG v1.4.9 (Darwin)
 
-iD8DBQFIDLNKR0BL4gbYw3QRAoGUAJ9ra5a7DBSPpUO+vdq+iQN0c5mBggCffbLi
-OueDwGa9ESl1PbOGmHB2P/8=
-=W7nz
+iEYEARECAAYFAkhpnKEACgkQR0BL4gbYw3R/MQCfcRNoySXPwAvkgXzrLJc+r0xz
+1YkAn3K3uZbn4CdbQyAFYftYloML2Xhz
+=1TlS
 -----END PGP SIGNATURE-----

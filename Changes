@@ -1,3 +1,9 @@
+Authen-SASL 2.12 -- Mon Jun 30 21:35:21 CDT 2008
+
+Enhancements
+  * GSSAPI implement protocol according to RFC, but by default, remain compatible with cyrus sasl lib
+  * DIGEST-MD5 implement channel encryption layer
+
 Authen-SASL 2.11 -- Mon Apr 21 10:23:19 CDT 2008
 
 Enhancements
