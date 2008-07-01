@@ -8,6 +8,7 @@ abstract	('SASL Authentication framework');
 author		('Graham Barr <gbarr@pobox.com>');
 version_from	('lib/Authen/SASL.pm');
 license		('perl');
+repository      ('git://git.goingon.net/Authen-SASL.git');
 
 check_nmake();      # check and download nmake.exe for Win32
 
