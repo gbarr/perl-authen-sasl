@@ -1,10 +1,12 @@
 #!perl
 
 BEGIN {
-  eval { require Digest::MD5 }
+  require Test::More;
+  eval { require Digest::MD5 } or Test::More->import(skip_all => 'Need Digest::MD5');
+  eval { require Digest::HMAC_MD5 } or Test::More->import(skip_all => 'Need Digest::HMAC_MD5');
 }
 
-use Test::More ($Digest::MD5::VERSION ? (tests => 9) : (skip_all => 'Need Digest::MD5'));
+use Test::More (tests => 9);
 
 use Authen::SASL qw(Perl);
 

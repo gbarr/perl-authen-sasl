@@ -20,6 +20,7 @@ features(
   'DIGEST-MD5 mechanism' => [
     -default => 1,
     'Digest::MD5'  => 0,
+    'Digest::HMAC_MD5'  => 0,
   ],
   'CRAM-MD5 mechanism' => [
     -default => 0,
