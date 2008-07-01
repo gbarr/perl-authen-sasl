@@ -17,7 +17,7 @@ sub _carp {
 
 
 use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS $TODO);
-$VERSION = '0.70';
+$VERSION = '0.62';
 $VERSION = eval $VERSION;    # make the alpha version come out as a number
 
 use Test::Builder::Module;
@@ -130,12 +130,6 @@ sub can_ok ($@) {
     my $class = ref $proto || $proto;
     my $tb = Test::More->builder;
 
-    unless( $class ) {
-        my $ok = $tb->ok( 0, "->can(...)" );
-        $tb->diag('    can_ok() called with empty class or reference');
-        return $ok;
-    }
-
     unless( @methods ) {
         my $ok = $tb->ok( 0, "$class->can(...)" );
         $tb->diag('    can_ok() called with no methods');
@@ -144,13 +138,15 @@ sub can_ok ($@) {
 
     my @nok = ();
     foreach my $method (@methods) {
-        $tb->_try(sub { $proto->can($method) }) or push @nok, $method;
+        local($!, $@);  # don't interfere with caller's $@
+                        # eval sometimes resets $!
+        eval { $proto->can($method) } || push @nok, $method;
     }
 
     my $name;
     $name = @methods == 1 ? "$class->can('$methods[0]')" 
                           : "$class->can(...)";
-
+    
     my $ok = $tb->ok( !@nok, $name );
 
     $tb->diag(map "    $class->can('$_') failed\n", @nok);
@@ -158,7 +154,7 @@ sub can_ok ($@) {
     return $ok;
 }
 
-#line 523
+#line 519
 
 sub isa_ok ($$;$) {
     my($object, $class, $obj_name) = @_;
@@ -175,10 +171,10 @@ sub isa_ok ($$;$) {
     }
     else {
         # We can't use UNIVERSAL::isa because we want to honor isa() overrides
-        my($rslt, $error) = $tb->_try(sub { $object->isa($class) });
-        if( $error ) {
-            if( $error =~ /^Can't call method "isa" on unblessed reference/ ) {
-                # Its an unblessed reference
+        local($@, $!);  # eval sometimes resets $!
+        my $rslt = eval { $object->isa($class) };
+        if( $@ ) {
+            if( $@ =~ /^Can't call method "isa" on unblessed reference/ ) {
                 if( !UNIVERSAL::isa($object, $class) ) {
                     my $ref = ref $object;
                     $diag = "$obj_name isn't a '$class' it's a '$ref'";
@@ -186,8 +182,9 @@ sub isa_ok ($$;$) {
             } else {
                 die <<WHOA;
 WHOA! I tried to call ->isa on your object and got some weird error.
+This should never happen.  Please contact the author immediately.
 Here's the error.
-$error
+$@
 WHOA
             }
         }
@@ -212,7 +209,7 @@ WHOA
 }
 
 
-#line 592
+#line 589
 
 sub pass (;$) {
     my $tb = Test::More->builder;
@@ -224,7 +221,7 @@ sub fail (;$) {
     $tb->ok(0, @_);
 }
 
-#line 653
+#line 650
 
 sub use_ok ($;@) {
     my($module, @imports) = @_;
@@ -233,7 +230,7 @@ sub use_ok ($;@) {
 
     my($pack,$filename,$line) = caller;
 
-    local($@,$!,$SIG{__DIE__});   # isolate eval
+    local($@,$!);   # eval sometimes interferes with $!
 
     if( @imports == 1 and $imports[0] =~ /^\d+(?:\.\d+)?$/ ) {
         # probably a version check.  Perl needs to see the bare number
@@ -266,7 +263,7 @@ DIAGNOSTIC
     return $ok;
 }
 
-#line 702
+#line 699
 
 sub require_ok ($) {
     my($module) = shift;
@@ -278,8 +275,7 @@ sub require_ok ($) {
     # Module names must be barewords, files not.
     $module = qq['$module'] unless _is_module_name($module);
 
-    local($!, $@, $SIG{__DIE__}); # isolate eval
-    local $SIG{__DIE__};
+    local($!, $@); # eval sometimes interferes with $!
     eval <<REQUIRE;
 package $pack;
 require $module;
@@ -310,7 +306,7 @@ sub _is_module_name {
     $module =~ /^[a-zA-Z]\w*$/;
 }
 
-#line 779
+#line 775
 
 use vars qw(@Data_Stack %Refs_Seen);
 my $DNE = bless [], 'Does::Not::Exist';
@@ -330,21 +326,21 @@ WARNING
 	return $tb->ok(0);
     }
 
-    my($got, $expected, $name) = @_;
+    my($this, $that, $name) = @_;
 
-    $tb->_unoverload_str(\$expected, \$got);
+    $tb->_unoverload_str(\$that, \$this);
 
     my $ok;
-    if( !ref $got and !ref $expected ) {  		# neither is a reference
-        $ok = $tb->is_eq($got, $expected, $name);
+    if( !ref $this and !ref $that ) {  		# neither is a reference
+        $ok = $tb->is_eq($this, $that, $name);
     }
-    elsif( !ref $got xor !ref $expected ) {  	# one's a reference, one isn't
+    elsif( !ref $this xor !ref $that ) {  	# one's a reference, one isn't
         $ok = $tb->ok(0, $name);
-	$tb->diag( _format_stack({ vals => [ $got, $expected ] }) );
+	$tb->diag( _format_stack({ vals => [ $this, $that ] }) );
     }
     else {			       		# both references
         local @Data_Stack = ();
-        if( _deep_check($got, $expected) ) {
+        if( _deep_check($this, $that) ) {
             $ok = $tb->ok(1, $name);
         }
         else {
@@ -411,7 +407,7 @@ sub _type {
     return '';
 }
 
-#line 919
+#line 915
 
 sub diag {
     my $tb = Test::More->builder;
@@ -420,7 +416,7 @@ sub diag {
 }
 
 
-#line 988
+#line 984
 
 #'#
 sub skip {
@@ -434,11 +430,6 @@ sub skip {
         $how_many = 1;
     }
 
-    if( defined $how_many and $how_many =~ /\D/ ) {
-        _carp "skip() was passed a non-numeric number of tests.  Did you get the arguments backwards?";
-        $how_many = 1;
-    }
-
     for( 1..$how_many ) {
         $tb->skip($why);
     }
@@ -448,7 +439,7 @@ sub skip {
 }
 
 
-#line 1075
+#line 1066
 
 sub todo_skip {
     my($why, $how_many) = @_;
@@ -469,7 +460,7 @@ sub todo_skip {
     last TODO;
 }
 
-#line 1128
+#line 1119
 
 sub BAIL_OUT {
     my $reason = shift;
@@ -478,7 +469,7 @@ sub BAIL_OUT {
     $tb->BAIL_OUT($reason);
 }
 
-#line 1167
+#line 1158
 
 #'#
 sub eq_array {
@@ -602,7 +593,7 @@ WHOA
 }
 
 
-#line 1298
+#line 1289
 
 sub eq_hash {
     local @Data_Stack;
@@ -635,7 +626,7 @@ sub _eq_hash {
     return $ok;
 }
 
-#line 1355
+#line 1346
 
 sub eq_set  {
     my($a1, $a2) = @_;
@@ -661,6 +652,6 @@ sub eq_set  {
     );
 }
 
-#line 1545
+#line 1534
 
 1;
