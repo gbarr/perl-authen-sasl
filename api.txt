@@ -6,11 +6,6 @@ Properties are then set on the $conn object by calling $conn->property
 
 Then client_start is called
 
-  Currently client_start returns the mechanism name and the initial
-  string, but I am thinking about changing that to just the initial
-  string. The mecanism is avaliabe via a method call anyway.
-
-
 Then we call client_step with a challenge string to get a response
 string.
 
