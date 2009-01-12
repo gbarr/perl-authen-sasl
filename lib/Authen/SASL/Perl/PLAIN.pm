@@ -14,6 +14,8 @@ my %secflags = (
 	noanonymous => 1,
 );
 
+my @tokens = qw(authname user pass);
+
 sub _order { 1 }
 sub _secflags {
   shift;
@@ -24,13 +26,31 @@ sub mechanism { 'PLAIN' }
 
 sub client_start {
   my $self = shift;
+  $self->{error} = undef;
 
   my @parts = map {
     my $v = $self->_call($_);
     defined($v) ? $v : ''
-  } qw(authname user pass);
+  } @tokens;
 
   join("\0", @parts);
+}
+
+sub server_start {
+  my $self       = shift;
+  my $challenge  = shift;
+
+  $self->{error} = undef;
+  return unless defined $challenge;
+
+  my %parts;
+  @parts{@tokens} = split "\0", $challenge, scalar @tokens;
+  for (@tokens) {
+    return $self->set_error("Credentials don't match")
+      unless (($parts{$_} || "" ) eq ($self->_call($_) || ""));
+  }
+  $self->set_success;
+  return 1;
 }
 
 1;
@@ -55,7 +75,7 @@ Authen::SASL::Perl::PLAIN - Plain Login Authentication class
 
 =head1 DESCRIPTION
 
-This method implements the client part of the PLAIN SASL algorithm,
+This method implements the client and server part of the PLAIN SASL algorithm,
 as described in RFC 2595 resp. IETF Draft draft-ietf-sasl-plain-XX.txt
 
 =head2 CALLBACK
@@ -100,5 +120,9 @@ it and/or modify it under the same terms as Perl itself.
 Documentation Copyright (c) 2004 Peter Marschall.
 All rights reserved.  This documentation is distributed,
 and may be redistributed, under the same terms as Perl itself. 
+
+Server support Copyright (c) 2009 Yann Kerherve.
+All rights reserved. This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.
 
 =cut

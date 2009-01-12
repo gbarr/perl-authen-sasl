@@ -17,16 +17,20 @@ my %secflags = (
 );
 my %have;
 
-sub client_new {
+sub client_new { _new(@_) }
+sub server_new { _new(@_) }
+
+sub _new {
   my ($pkg, $parent, $service, $host, $secflags) = @_;
 
   my @sec = grep { $secflags{$_} } split /\W+/, lc($secflags || '');
 
   my $self = {
-    callback => { %{$parent->callback} },
-    service  => $service  || '',
-    host     => $host     || '',
-    debug    => $parent->{debug} || 0,
+    callback  => { %{$parent->callback} },
+    service   => $service  || '',
+    host      => $host     || '',
+    debug     => $parent->{debug} || 0,
+    need_step => 1,
   };
 
   my @mpkg = sort {
@@ -48,6 +52,22 @@ sub code     { defined(shift->{error}) || 0 }
 sub error    { shift->{error}    }
 sub service  { shift->{service}  }
 sub host     { shift->{host}     }
+
+sub need_step {
+    my $self = shift;
+    return 0 if $self->{error};
+    return $self->{need_step};
+}
+
+sub set_success {
+    my $self = shift;
+    $self->{need_step} = 0;
+}
+
+sub is_success {
+    my $self = shift;
+    return !$self->code && !$self->need_step;
+}
 
 sub set_error {
   my $self = shift;
@@ -80,6 +100,8 @@ sub callback {
 sub mechanism    { undef }
 sub client_step  { undef }
 sub client_start { undef }
+sub server_step  { undef }
+sub server_start { undef }
 
 # Private methods used by Authen::SASL::Perl that
 # may be overridden in mechanism sub-calsses
