@@ -26,7 +26,9 @@ sub mechanism { 'PLAIN' }
 
 sub client_start {
   my $self = shift;
-  $self->{error} = undef;
+
+  $self->{error}     = undef;
+  $self->{need_step} = 0;
 
   my @parts = map {
     my $v = $self->_call($_);
@@ -41,7 +43,8 @@ sub server_start {
   my $challenge  = shift;
 
   $self->{error} = undef;
-  return unless defined $challenge;
+  return $self->set_error("No challenge: Credentials don't match")
+    unless defined $challenge;
 
   my %parts;
   @parts{@tokens} = split "\0", $challenge, scalar @tokens;
