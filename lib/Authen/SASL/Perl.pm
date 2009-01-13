@@ -17,8 +17,19 @@ my %secflags = (
 );
 my %have;
 
-sub client_new { _new(@_) }
-sub server_new { _new(@_) }
+sub client_new {
+    my $client = _new(@_);
+    $client->_init_client(@_);
+    return $client;
+}
+sub server_new {
+    my $server = _new(@_);
+    $server->_init_server(@_);
+    return $server;
+}
+
+sub _init_server {}
+sub _init_client {}
 
 sub _new {
   my ($pkg, $parent, $service, $host, $secflags) = @_;
