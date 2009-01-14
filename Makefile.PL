@@ -19,4 +19,6 @@ requires	'Digest::MD5'  => 0;
 requires	'Digest::HMAC_MD5'  => 0;
 recommends	'GSSAPI'  => 0;
 
+tests_recursive;
+
 WriteAll();

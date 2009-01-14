@@ -1,4 +1,6 @@
 #!perl
+use strict;
+use warnings;
 
 use Test::More tests => 42;
 
@@ -23,7 +25,7 @@ my %params = (
         my $self = shift;
         my ($username, $authzid) = @_;
         return unless $username;
-        return $creds{$autzid || "default"}{$username};
+        return $creds{$authzid || "default"}{$username};
     },
   },
 );
@@ -35,8 +37,7 @@ is($ssasl->mechanism, 'PLAIN', 'sasl mechanism');
 my $server = $ssasl->server_new("ldap","localhost");
 is($server->mechanism, 'PLAIN', 'server mechanism');
 
-for ('', 'none') {
-    $authname = $_;
+for my $authname ('', 'none') {
     is_failure("");
     is_failure("xxx");
     is_failure("\0\0\0\0\0\0\0");
