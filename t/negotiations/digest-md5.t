@@ -1,7 +1,7 @@
 #!perl
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 11;
 use FindBin qw($Bin);
 require "$Bin/../lib/common.pl";
 
@@ -64,5 +64,17 @@ negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;
         ok !$srv->is_success, "failure";
         like $srv->error, qr/response/, "incorrect response";
+    });
+}
+
+## digest-uri checking
+{
+    local $cconf->{host}    = "elsewhere";
+    local $cconf->{service} = "pop3";
+    negotiate($cconf, $sconf, sub {
+        my ($clt, $srv) = @_;
+        ok !$srv->is_success, "failure";
+        my $error = $srv->error || "";
+        like $error, qr/incorrect.*digest.*uri/i, "incorrect digest uri";
     });
 }

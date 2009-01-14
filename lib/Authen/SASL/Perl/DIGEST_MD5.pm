@@ -408,10 +408,16 @@ sub server_step {
   }
   my $authzid = $cparams{authzid};
 
-  ## TODO: digest-uri
-  # "Servers SHOULD check that the supplied value is correct. This will
-  # detect accidental connection to the incorrect server, as well as
+  # digest-uri: "Servers SHOULD check that the supplied value is correct.
+  # This will detect accidental connection to the incorrect server, as well as
   # some redirection attacks"
+  my $digest_uri = $cparams{'digest-uri'};
+  my ($cservice, $chost, $cservname) = split '/', $digest_uri, 3;
+  if ($cservice ne $self->service or $chost ne $self->host) {
+    # XXX deal with serv_name
+    return $self->set_error("Incorrect digest-uri");
+  }
+
   my $realm = $cparams{'realm'};
   my $password = $self->_call('pass', $username, $realm, $authzid);
 
