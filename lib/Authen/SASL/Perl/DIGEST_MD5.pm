@@ -13,7 +13,6 @@ use Digest::MD5 qw(md5_hex md5);
 use Digest::HMAC_MD5 qw(hmac_md5);
 
 # TODO: complete qop support in server, should be configurable
-# TODO: crypt layer support (maxbuf etc..)
 
 $VERSION = "1.07";
 @ISA = qw(Authen::SASL::Perl);
@@ -211,7 +210,7 @@ sub server_start {
     charset       => 'utf-8',
     algorithm     => 'md5-sess',
     realm         => $realm,
-    #server-maxbuf XXX only if auth-conf
+    maxbuf        => $self->property('maxbuf'),
 
 ## IN DRAFT ONLY:
 # If this directive is present multiple times the client MUST treat
@@ -219,8 +218,8 @@ sub server_start {
 # separated value from all instances. I.e.,
 # 'qop="auth",qop="auth-int"' is the same as 'qop="auth,auth-int"
 
-    'qop' => $qop,
-    'cipher' => [ map { $_->{name} } @ourciphers ],
+    'qop'         => $qop,
+    'cipher'      => [ map { $_->{name} } @ourciphers ],
   );
 
   return _response(\%response);
@@ -294,7 +293,7 @@ sub client_step {   # $self, $server_sasl_credentials
   return $self->set_error("Password is required")
     unless defined $password;
 
-  $self->property('maxout',$sparams{server_maxbuf} || 65536);
+  $self->property('maxout', $sparams{maxbuf} || 65536);
 
   # Generate the response value
   $self->{state} = 1;

@@ -40,6 +40,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         'algorithm=md5-sess',
         'charset=utf-8',
         'cipher="rc4,3des,des,rc4-56,rc4-40"',
+        'maxbuf=16777215',
         'nonce="80338e79d2ca9b9c090ebaaa2ef293c7"',
         'qop="auth"',
         'realm="elwood.innosoft.com"';
@@ -72,6 +73,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         'algorithm=md5-sess',
         'charset=utf-8',
         'cipher="rc4,3des,des,rc4-56,rc4-40"',
+        'maxbuf=16777215',
         'nonce="80338e79d2ca9b9c090ebaaa2ef293c7"',
         'qop="auth"',
         'realm="elwood.innosoft.com"';
@@ -113,6 +115,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         'algorithm=md5-sess',
         'charset=utf-8',
         'cipher="rc4,3des,des,rc4-56,rc4-40"',
+        'maxbuf=16777215',
         'nonce="80338e79d2ca9b9c090ebaaa2ef293c7"',
         'qop="auth,auth-conf,auth-int"',
         'realm="elwood.innosoft.com"';
