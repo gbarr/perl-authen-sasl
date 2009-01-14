@@ -48,10 +48,12 @@ sub server_start {
 
   my %parts;
   @parts{@tokens} = split "\0", $challenge, scalar @tokens;
-  for (@tokens) {
-    return $self->set_error("Credentials don't match")
-      unless (($parts{$_} || "" ) eq ($self->_call($_) || ""));
-  }
+  my $expected_pass = $self->_call('pass', $parts{user}, $parts{authname});
+  return $self->set_error("Credentials don't match")
+    unless defined $expected_pass;
+  return $self->set_error("Credentials don't match")
+    unless $expected_pass eq ($parts{pass} || "");
+
   $self->set_success;
   return 1;
 }
@@ -89,15 +91,16 @@ The callbacks used are:
 
 =item authname
 
-The authorization id to use after successful authentication
+The authorization id to use after successful authentication (client)
 
 =item user
 
-The username to be used for authentication
+The username to be used for authentication (client)
 
 =item pass
 
-The user's password to be used for authentication
+The user's password to be used for authentication.
+For the server,
 
 =back
 

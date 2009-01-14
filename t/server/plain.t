@@ -5,13 +5,26 @@ use Test::More tests => 42;
 use Authen::SASL qw(Perl);
 use_ok('Authen::SASL::Perl::PLAIN');
 
-my $authname;
+my %creds = (
+    default => {
+        yann => "maelys",
+        YANN => "MAELYS",
+    },
+    none => {
+        yann => "maelys",
+        YANN => "MAELYS",
+    },
+);
+
 my %params = (
   mechanism => 'PLAIN',
   callback => {
-    user => 'yann',
-    pass => 'maelys',
-    authname => sub { $authname },
+    pass => sub {
+        my $self = shift;
+        my ($username, $authzid) = @_;
+        return unless $username;
+        return $creds{$autzid || "default"}{$username};
+    },
   },
 );
 
