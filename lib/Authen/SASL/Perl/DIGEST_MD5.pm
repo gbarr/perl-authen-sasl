@@ -12,11 +12,8 @@ use vars qw($VERSION @ISA $CNONCE $NONCE $SQOP);
 use Digest::MD5 qw(md5_hex md5);
 use Digest::HMAC_MD5 qw(hmac_md5);
 
-# TODO: server realm/multi
 # TODO: complete qop support in server, should be configurable
-# TODO: if no crypt is available, don't propose auth-conf
 # TODO: crypt layer support (maxbuf etc..)
-# TODO: more unit tests
 
 $VERSION = "1.07";
 @ISA = qw(Authen::SASL::Perl);
