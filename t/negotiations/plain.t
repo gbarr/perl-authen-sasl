@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 14;
+use Test::More tests => 9;
 
 use FindBin qw($Bin);
 require "$Bin/../lib/common.pl";
