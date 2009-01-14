@@ -37,7 +37,9 @@ my (%cqdval, %sqdval);
 #  username authzid realm nonce cnonce digest-uri qop cipher
 #)} = ();
 
-my %multi; @multi{qw(realm auth-param)} = ();
+my %multi;
+@{$multi{server}}{qw(realm auth-param)} = ();
+@{$multi{client}}{qw()} = ();
 
 my @server_required = qw(algorithm nonce);
 my @client_required = qw(username nonce cnonce nc qop response);
@@ -232,7 +234,7 @@ sub client_step {   # $self, $server_sasl_credentials
   $self->{server_params} = \my %sparams;
 
   # Parse response parameters
-  $self->_parse_challenge(\$challenge, $self->{server_params})
+  $self->_parse_challenge(\$challenge, server => $self->{server_params})
     or return $self->set_error("Bad challenge: '$challenge'");
 
   if ($self->{state} == 1) {
@@ -384,7 +386,7 @@ sub server_step {
   my $challenge = shift;
 
   $self->{client_params} = \my %cparams;
-  $self->_parse_challenge(\$challenge, $self->{client_params})
+  $self->_parse_challenge(\$challenge, client => $self->{client_params})
      or return $self->set_error("Bad challenge: '$challenge'");
 
   # check required fields in server challenge
@@ -453,6 +455,7 @@ sub _response {
 sub _parse_challenge {
   my $self          = shift;
   my $challenge_ref = shift;
+  my $type          = shift;
   my $params        = shift;
 
   while($$challenge_ref =~
@@ -467,7 +470,7 @@ sub _parse_challenge {
     if ($v =~ /^"(.*)"$/s) {
       ($v = $1) =~ s/\\(.)/$1/g;
     }
-    if (exists $multi{$k}) {
+    if (exists $multi{$type}{$k}) {
       my $aref = $params->{$k} ||= [];
       push @$aref, $v;
     }
@@ -724,15 +727,16 @@ The callbacks used are:
 
 =item authname
 
-The authorization id to use after successful authentication
+The authorization id to use after successful authentication (client)
 
 =item user
 
-The username to be used in the response
+The username to be used in the response (client)
 
 =item pass
 
-The password to be used to compute the response
+The password to be used to compute the response.
+
 If this callback is a coderef, then in server_step, the following
 arguments are passed:
 
