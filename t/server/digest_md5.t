@@ -8,7 +8,7 @@ BEGIN {
     eval { require Digest::HMAC_MD5 } or Test::More->import(skip_all => 'Need Digest::HMAC_MD5');
 }
 
-use Test::More (tests => 29);
+use Test::More (tests => 33);
 
 use Authen::SASL qw(Perl);
 use_ok 'Authen::SASL::Perl::DIGEST_MD5';
@@ -188,4 +188,31 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
     my $s1 = $server->server_step($c1);
     ok !$server->is_success, "Bad challenge";
     like $server->error, qr/Bad.*challenge/i, $server->error;
+}
+
+## nonce-count;
+{
+    $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
+    $server = $sasl->server_new("ldap","elwood.innosoft.com", "noplaintext noanonymous");
+    $server->server_start('');
+
+    my $c1 = join ",", qw(
+        charset=utf-8
+        cnonce="3858f62230ac3c915f300c664312c63f"
+        digest-uri="ldap/elwood.innosoft.com"
+        nc=00000001
+        nonce="80338e79d2ca9b9c090ebaaa2ef293c7"
+        qop=auth-conf
+        realm="elwood.innosoft.com"
+        response=e3c8b38d9bd9556761253e9879c4a8a2
+        username="gbarr"
+    );
+
+    my $s1 = $server->server_step($c1);
+    ok $server->is_success, "first is success";
+    ok ! $server->error, "no error";
+
+    my $s2 = $server->server_step($c1);
+    ok !$server->is_success, "replay attack";
+    like $server->error, qr/nonce-count.*match/i, $server->error;
 }
