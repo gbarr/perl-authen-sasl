@@ -119,10 +119,11 @@ my @ourciphers = (
 );
 
 ## The system we are on, might not be able to crypt the stream
-my $NO_CRYPT_AVAILABLE = 0;
+my $NO_CRYPT_AVAILABLE = 1;
 for (@ourciphers) {
-    if ( eval "require $_->{pkg}" ) {
-        $NO_CRYPT_AVAILABLE = 1;
+    eval "require $_->{pkg}";
+    unless ($@) {
+        $NO_CRYPT_AVAILABLE = 0;
         last;
     }
 }
