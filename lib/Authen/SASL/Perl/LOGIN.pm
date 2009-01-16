@@ -156,6 +156,7 @@ L<Authen::SASL::Perl>
 
 Software written by Graham Barr <gbarr@pobox.com>,
 documentation written by Peter Marschall <peter@adpm.de>.
+Server support by Yann Kerherve <yannk@cpan.org>
 
 Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 <perl-ldap@perl.org>
@@ -169,5 +170,9 @@ it and/or modify it under the same terms as Perl itself.
 Documentation Copyright (c) 2004 Peter Marschall.
 All rights reserved.  This documentation is distributed,
 and may be redistributed, under the same terms as Perl itself. 
+
+Server support Copyright (c) 2009 Yann Kerherve.
+All rights reserved. This program is free software; you can redistribute 
+it and/or modify it under the same terms as Perl itself.
 
 =cut
