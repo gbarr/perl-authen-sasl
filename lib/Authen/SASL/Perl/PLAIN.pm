@@ -39,15 +39,15 @@ sub client_start {
 }
 
 sub server_start {
-  my $self       = shift;
-  my $challenge  = shift;
+  my $self      = shift;
+  my $response  = shift;
 
   $self->{error} = undef;
-  return $self->set_error("No challenge: Credentials don't match")
-    unless defined $challenge;
+  return $self->set_error("No response: Credentials don't match")
+    unless defined $response;
 
   my %parts;
-  @parts{@tokens} = split "\0", $challenge, scalar @tokens;
+  @parts{@tokens} = split "\0", $response, scalar @tokens;
 
   # I'm not entirely sure of what I am doing
   $self->{answer}{$_} = $parts{$_} for qw/authname user/;
