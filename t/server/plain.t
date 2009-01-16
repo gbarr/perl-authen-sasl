@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 42;
+use Test::More tests => 47;
 
 use Authen::SASL qw(Perl);
 use_ok('Authen::SASL::Perl::PLAIN');
@@ -59,3 +59,26 @@ sub is_failure {
     ok !$server->is_success, $msg || "failure";
     like $server->error, qr/match/i, "failure";
 }
+
+
+## testing checkpass callback, which takes precedence
+## over getsecret when specified
+%params = (
+  mechanism => 'PLAIN',
+  callback => {
+    getsecret => "incorrect",
+    checkpass => sub {
+        my $self = shift;
+        my ($username, $password, $realm) = @_;
+        is $username, "yyy", "username correct";
+        is $password, "zzz", "correct password";
+        is $realm,    "xxx", "correct realm";
+        return 1;
+    }
+  },
+);
+
+ok($ssasl = Authen::SASL->new( %params ), "new");
+$server = $ssasl->server_new("ldap","localhost");
+$server->server_start("xxx\0yyy\0zzz");
+ok $server->is_success, "success";

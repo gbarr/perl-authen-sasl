@@ -52,6 +52,15 @@ sub server_start {
   # I'm not entirely sure of what I am doing
   $self->{answer}{$_} = $parts{$_} for qw/authname user/;
 
+  if ($self->callback('checkpass')) {
+    if ($self->_call('checkpass', @parts{qw/user pass authname/}) ) {
+      $self->set_success;
+      return 1;
+    }
+    else {
+      return $self->set_error("Credentials don't match");
+    }
+  }
   my $expected_pass = $self->_call('getsecret', @parts{qw/user authname/});
   return $self->set_error("Credentials don't match")
     unless defined $expected_pass;
