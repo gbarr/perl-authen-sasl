@@ -52,7 +52,7 @@ sub server_start {
   # I'm not entirely sure of what I am doing
   $self->{answer}{$_} = $parts{$_} for qw/authname user/;
 
-  if ($self->callback('checkpass')) {
+  if (defined $self->callback('checkpass')) {
     if ($self->_call('checkpass', @parts{qw/user pass authname/}) ) {
       $self->set_success;
       return 1;

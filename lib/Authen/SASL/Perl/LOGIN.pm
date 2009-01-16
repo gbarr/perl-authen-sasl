@@ -31,10 +31,62 @@ sub client_step {
   my ($self, $string) = @_;
 
   $string =~ /password/i
-    ? $self->_call('pass')
+    ? do { $self->set_success; $self->_call('pass') }
     : $string =~ /username/i
       ? $self->_call('user')
       : '';
+}
+
+sub server_start {
+  my $self      = shift;
+  my $response  = shift;
+
+  $self->{answer}    = {};
+  $self->{stage}     = 0;
+  $self->{need_step} = 1;
+  $self->{error}     = undef;
+  return 'Username:';
+}
+
+sub server_step {
+  my $self      = shift;
+  my $response  = shift;
+
+  my $stage = ++$self->{stage};
+
+  if ($stage == 1) {
+    return $self->set_error("Invalid sequence (empty username)")
+        unless defined $response;
+    $self->{answer}{user} = $response;
+    return "Password:";
+  }
+  elsif ($stage == 2) {
+    return $self->set_error("Invalid sequence (empty pass)")
+        unless defined $response;
+    $self->{answer}{pass} = $response;
+  }
+  else {
+    return $self->set_error("Invalid sequence (end)");
+  }
+
+  if ($self->callback('checkpass')) {
+    my @answers = ($self->{answer}{user}, $self->{answer}{pass});
+    if ($self->_call('checkpass', @answers) ) {
+      $self->set_success;
+      return 1;
+    }
+    else {
+      return $self->set_error("Credentials don't match");
+    }
+  }
+  my $expected_pass = $self->_call('getsecret', $self->{answer}{user});
+  return $self->set_error("Credentials don't match, (expected)")
+    unless defined $expected_pass;
+  return $self->set_error("Credentials don't match")
+    unless $expected_pass eq ($self->{answer}{pass} || "");
+
+  $self->set_success;
+  return 1;
 }
 
 1;
@@ -59,12 +111,14 @@ Authen::SASL::Perl::LOGIN - Login Authentication class
 
 =head1 DESCRIPTION
 
-This method implements the client part of the LOGIN SASL algorithm,
+This method implements the client and server part of the LOGIN SASL algorithm,
 as described in IETF Draft draft-murchison-sasl-login-XX.txt.
 
 =head2 CALLBACK
 
 The callbacks used are:
+
+=head3 Client
 
 =over 4
 
@@ -75,6 +129,21 @@ The username to be used for authentication
 =item pass
 
 The user's password to be used for authentication
+
+=back
+
+=head3 Server
+
+=over4
+
+=item getsecret(username)
+
+returns the password associated with C<username>
+
+=item checkpass(username, password)
+
+returns true and false depending on the validity of the credentials passed
+in arguments.
 
 =back
 

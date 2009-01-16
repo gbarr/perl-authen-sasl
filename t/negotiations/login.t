@@ -11,7 +11,7 @@ use_ok('Authen::SASL::Perl::PLAIN');
 ## base conf
 my $cconf = {
     sasl => {
-        mechanism => 'PLAIN',
+        mechanism => 'LOGIN',
         callback => {
             user => 'yann',
             pass => 'maelys',
@@ -23,7 +23,7 @@ my $cconf = {
 
 my $sconf = {
     sasl => {
-        mechanism => 'PLAIN',
+        mechanism => 'LOGIN',
         callback => {
             getsecret => 'maelys',
         },
@@ -33,10 +33,11 @@ my $sconf = {
 };
 
 ## base negotiation should work
+$DB::single=1;
 negotiate($cconf, $sconf, sub {
     my ($clt, $srv) = @_;
-    is $clt->mechanism, "PLAIN";
-    is $srv->mechanism, "PLAIN";
+    is $clt->mechanism, "LOGIN";
+    is $srv->mechanism, "LOGIN";
     ok $clt->is_success, "client success" or diag $clt->error;
     ok $srv->is_success, "server success" or diag $srv->error;
 });
@@ -44,7 +45,7 @@ negotiate($cconf, $sconf, sub {
 ## invalid password
 {
     # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{getsecret} = "x";
+    local $sconf->{sasl}{callback}{getsecret} = "wrong";
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;
@@ -53,7 +54,7 @@ negotiate($cconf, $sconf, sub {
     });
 }
 
-## invalid password with different callback
+## invalid password
 {
     # hey callback could just be a subref that returns a localvar
     local $sconf->{sasl}{callback}{checkpass} = sub { 0 };
