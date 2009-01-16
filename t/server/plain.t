@@ -21,7 +21,7 @@ my %creds = (
 my %params = (
   mechanism => 'PLAIN',
   callback => {
-    pass => sub {
+    getsecret => sub {
         my $self = shift;
         my ($username, $authzid) = @_;
         return unless $username;

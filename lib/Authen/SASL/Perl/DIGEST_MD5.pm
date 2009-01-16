@@ -418,7 +418,9 @@ sub server_step {
   }
 
   my $realm = $cparams{'realm'};
-  my $password = $self->_call('pass', $username, $realm, $authzid);
+  my $password = $self->_call('getsecret', $username, $realm, $authzid );
+  return $self->set_error("Cannot get the passord for $username")
+    unless defined $password;
 
   ## configure the security layer
   $self->_server_layer($cparams{qop} || "auth")
@@ -433,6 +435,9 @@ sub server_step {
   my %response = (
     rspauth => $rspauth,
   );
+
+  # I'm not entirely sure of what I am doing
+  $self->{answer}{$_} = $cparams{$_} for qw/username authzid realm serv/;
 
   $self->set_success;
   return _response(\%response);
@@ -725,47 +730,47 @@ algorithm, as described in RFC 2831.
 
 The callbacks used are:
 
+=head3 client
+
 =over 4
 
 =item authname
 
-The authorization id to use after successful authentication (client)
+The authorization id to use after successful authentication
 
 =item user
 
-The username to be used in the response (client)
+The username to be used in the response
 
 =item pass
 
 The password to be used to compute the response.
 
-If this callback is a coderef, then in server_step, the following
-arguments are passed:
-
-=over 4
-
-=item username, the username the client wants to authenticate against
-
-=item realm, the realm specified in client's response
-
-=item authzid, The "authorization ID" as per RFC 2222, encoded in UTF-8
-
-=back
-
 =item serv
 
-The service name when authenticating to a replicated service (client only)
+The service name when authenticating to a replicated service
 
 =item realm
 
-For the server: the default realm to provide to the client
-
-For the client:
 The authentication realm when overriding the server-provided default.
 If not given the server-provided value is used.
 
 The callback will be passed the list of realms that the server provided
 in the initial response.
+
+=back
+
+=head3 server
+
+=over4
+
+=item realm
+
+The default realm to provide to the client
+
+=item getsecret(username, realm, authzid)
+
+returns the password associated with C<username> and C<realm>
 
 =back
 

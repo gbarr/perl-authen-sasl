@@ -18,9 +18,7 @@ my $authname;
 my $sasl = Authen::SASL->new(
     mechanism => 'DIGEST-MD5',
     callback => {
-        user => 'gbarr',
-        pass => 'fred',
-        authname => sub { $authname },
+        getsecret => 'fred',
     },
 );
 ok($sasl,'new');

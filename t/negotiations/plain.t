@@ -25,7 +25,7 @@ my $sconf = {
     sasl => {
         mechanism => 'PLAIN',
         callback => {
-            pass => 'maelys',
+            getsecret => 'maelys',
         },
     },
     host => 'localhost',
@@ -44,7 +44,7 @@ negotiate($cconf, $sconf, sub {
 ## invalid password
 {
     # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{pass} = "x";
+    local $sconf->{sasl}{callback}{getsecret} = "x";
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;
@@ -56,7 +56,7 @@ negotiate($cconf, $sconf, sub {
 ## invalid password
 {
     # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{pass} = "x";
+    local $sconf->{sasl}{callback}{getsecret} = "x";
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;

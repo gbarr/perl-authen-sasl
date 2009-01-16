@@ -48,7 +48,11 @@ sub server_start {
 
   my %parts;
   @parts{@tokens} = split "\0", $challenge, scalar @tokens;
-  my $expected_pass = $self->_call('pass', $parts{user}, $parts{authname});
+
+  # I'm not entirely sure of what I am doing
+  $self->{answer}{$_} = $parts{$_} for qw/authname user/;
+
+  my $expected_pass = $self->_call('getsecret', @parts{qw/user authname/});
   return $self->set_error("Credentials don't match")
     unless defined $expected_pass;
   return $self->set_error("Credentials don't match")
@@ -87,6 +91,8 @@ as described in RFC 2595 resp. IETF Draft draft-ietf-sasl-plain-XX.txt
 
 The callbacks used are:
 
+=head3 Client
+
 =over 4
 
 =item authname
@@ -100,7 +106,21 @@ The username to be used for authentication (client)
 =item pass
 
 The user's password to be used for authentication.
-For the server,
+
+=back
+
+=head3 Server
+
+=over4
+
+=item getsecret(username, realm)
+
+returns the password associated with C<username> and C<realm>
+
+=item checkpass(username, password, realm)
+
+returns true and false depending on the validity of the credentials passed
+in arguments.
 
 =back
 
