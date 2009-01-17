@@ -70,6 +70,10 @@ sub need_step {
     return $self->{need_step};
 }
 
+## I think I need to rename that to end()?
+## It doesn't mean that SASL is successful, but that
+## that the negotiation is over, no more step necessary
+## at least for the client
 sub set_success {
     my $self = shift;
     $self->{need_step} = 0;

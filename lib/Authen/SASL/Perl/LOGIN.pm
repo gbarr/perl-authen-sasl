@@ -24,17 +24,31 @@ sub mechanism { 'LOGIN' }
 
 sub client_start {
   my $self = shift;
+  $self->{stage} = 0;
   '';
 }
 
 sub client_step {
   my ($self, $string) = @_;
 
-  $string =~ /password/i
-    ? do { $self->set_success; $self->_call('pass') }
-    : $string =~ /username/i
-      ? $self->_call('user')
-      : '';
+  # XXX technically this is wrong. I might want to change that.
+  # spec say it's "staged" and that the content of the challenge doesn't
+  # matter
+  # actually, let's try
+  my $stage = ++$self->{stage};
+  if ($stage == 1) {
+      return $self->_call('user');
+  }
+  elsif ($stage == 2) {
+      return $self->_call('pass');
+  }
+  elsif ($stage == 3) {
+      $self->set_success;
+      return;
+  }
+  else {
+      return $self->set_error("Invalid sequence");
+  }
 }
 
 sub server_start {
