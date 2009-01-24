@@ -26,10 +26,9 @@ ok($sasl,'new');
 no warnings 'once';
 # override for testing as by default it uses $$, time and rand
 $Authen::SASL::Perl::DIGEST_MD5::NONCE = "foobaz";
-$Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth" ];
 
 is($sasl->mechanism, 'DIGEST-MD5', 'sasl mechanism');
-my $server = $sasl->server_new("ldap","elwood.innosoft.com");
+my $server = $sasl->server_new("ldap","elwood.innosoft.com", { no_integrity => 1 });
 is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 
 ## simple success without authzid
@@ -107,7 +106,6 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 
 ## using auth-conf
 {
-    $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
     $server = $sasl->server_new("ldap","elwood.innosoft.com");
     my $expected_ss = join ",",
         'algorithm=md5-sess',
@@ -143,7 +141,6 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 }
 ## wrong challenge response
 {
-    $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
     $server = $sasl->server_new("ldap","elwood.innosoft.com");
     $server->server_start('');
 
@@ -166,7 +163,6 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 
 ## multiple digest-uri;
 {
-    $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
     $server = $sasl->server_new("ldap","elwood.innosoft.com");
     $server->server_start('');
 
@@ -190,7 +186,6 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 
 ## nonce-count;
 {
-    $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
     $server = $sasl->server_new("ldap","elwood.innosoft.com");
     $server->server_start('');
 

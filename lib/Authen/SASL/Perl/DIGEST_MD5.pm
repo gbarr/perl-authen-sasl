@@ -8,7 +8,7 @@
 package Authen::SASL::Perl::DIGEST_MD5;
 
 use strict;
-use vars qw($VERSION @ISA $CNONCE $NONCE $SQOP);
+use vars qw($VERSION @ISA $CNONCE $NONCE);
 use Digest::MD5 qw(md5_hex md5);
 use Digest::HMAC_MD5 qw(hmac_md5);
 
@@ -167,8 +167,7 @@ sub _init_server {
                              or $options->{no_confidentiality}
                              or $NO_CRYPT_AVAILABLE;
 
-  my $qop = $SQOP || \@qop;
-  $server->{supported_qop} = { map { $_ => 1 } @$qop };
+  $server->{supported_qop} = { map { $_ => 1 } @qop };
 }
 
 sub init_sec_layer {
