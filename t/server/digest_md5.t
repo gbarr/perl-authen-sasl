@@ -29,7 +29,7 @@ $Authen::SASL::Perl::DIGEST_MD5::NONCE = "foobaz";
 $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth" ];
 
 is($sasl->mechanism, 'DIGEST-MD5', 'sasl mechanism');
-my $server = $sasl->server_new("ldap","elwood.innosoft.com", "noplaintext noanonymous");
+my $server = $sasl->server_new("ldap","elwood.innosoft.com");
 is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 
 ## simple success without authzid
@@ -108,7 +108,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 ## using auth-conf
 {
     $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
-    $server = $sasl->server_new("ldap","elwood.innosoft.com", "noplaintext noanonymous");
+    $server = $sasl->server_new("ldap","elwood.innosoft.com");
     my $expected_ss = join ",",
         'algorithm=md5-sess',
         'charset=utf-8',
@@ -144,7 +144,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 ## wrong challenge response
 {
     $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
-    $server = $sasl->server_new("ldap","elwood.innosoft.com", "noplaintext noanonymous");
+    $server = $sasl->server_new("ldap","elwood.innosoft.com");
     $server->server_start('');
 
     my $c1 = join ",", qw(
@@ -167,7 +167,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 ## multiple digest-uri;
 {
     $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
-    $server = $sasl->server_new("ldap","elwood.innosoft.com", "noplaintext noanonymous");
+    $server = $sasl->server_new("ldap","elwood.innosoft.com");
     $server->server_start('');
 
     my $c1 = join ",", qw(
@@ -191,7 +191,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 ## nonce-count;
 {
     $Authen::SASL::Perl::DIGEST_MD5::SQOP  = [ "auth", "auth-int", "auth-conf" ];
-    $server = $sasl->server_new("ldap","elwood.innosoft.com", "noplaintext noanonymous");
+    $server = $sasl->server_new("ldap","elwood.innosoft.com");
     $server->server_start('');
 
     my $c1 = join ",", qw(

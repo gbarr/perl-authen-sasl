@@ -17,21 +17,31 @@ my %secflags = (
 );
 my %have;
 
-sub client_new {
-    my $client = _new(@_);
-    $client->_init_client(@_);
-    return $client;
-}
 sub server_new {
-    my $server = _new(@_);
-    $server->_init_server(@_);
-    return $server;
+  my ($pkg, $parent, $service, $host, $options) = @_;
+
+  my $self = {
+    callback  => { %{$parent->callback} },
+    service   => $service  || '',
+    host      => $host     || '',
+    debug     => $parent->{debug} || 0,
+    need_step => 1,
+  };
+
+  my $mechanism = $parent->mechanism
+    or croak "No server mechanism specified";
+  $mechanism =~ s/^\s*\b(.*)\b\s*$/$1/g;
+  $mechanism =~ s/-/_/g;
+  $mechanism =  uc $mechanism;
+  my $mpkg   = __PACKAGE__ . "::$mechanism";
+  eval "require $mpkg;"
+    or croak "Cannot use $mpkg for " . $parent->mechanism;
+  my $server = $mpkg->_init($self);
+  $server->_init_server($options);
+  return $server;
 }
 
-sub _init_server {}
-sub _init_client {}
-
-sub _new {
+sub client_new {
   my ($pkg, $parent, $service, $host, $secflags) = @_;
 
   my @sec = grep { $secflags{$_} } split /\W+/, lc($secflags || '');
@@ -57,6 +67,8 @@ sub _new {
 
   $mpkg[0]->_init($self);
 }
+
+sub _init_server {}
 
 sub _order   { 0 }
 sub code     { defined(shift->{error}) || 0 }

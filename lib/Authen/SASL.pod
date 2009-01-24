@@ -122,7 +122,7 @@ Sets the given callbacks to the given values
 
 Creates and returns a new connection object for a client-side connection.
 
-=item server_new ( SERVICE, HOST )
+=item server_new ( SERVICE, HOST, OPTIONS )
 
 Creates and returns a new connection object for a server-side connection.
 

@@ -150,20 +150,26 @@ sub _init {
 }
 
 sub _init_server {
-  my $server = shift;
+  my $server  = shift;
+  my $options = shift || {};
+  if (!ref $options or ref $options ne 'HASH') {
+    warn "options for DIGEST_MD5 should be a hashref";
+    $options = {};
+  }
 
   ## new server, means new nonce_counts
   $server->{nonce_counts} = {};
 
   ## determine supported qop
   my   @qop = ('auth');
-  push @qop, 'auth-int'  unless 0; ## options XXX in secflags
-  push @qop, 'auth-conf' unless 0 or $NO_CRYPT_AVAILABLE; ## options
+  push @qop, 'auth-int'  unless $options->{no_integrity};
+  push @qop, 'auth-conf' unless $options->{no_integrity}
+                             or $options->{no_confidentiality}
+                             or $NO_CRYPT_AVAILABLE;
+
   my $qop = $SQOP || \@qop;
   $server->{supported_qop} = { map { $_ => 1 } @$qop };
 }
-
-sub _init_client { }
 
 sub init_sec_layer {
   my $self           = shift;
@@ -397,7 +403,7 @@ sub server_step {
 
   my $qop = $cparams{'qop'} || "auth";
   return $self->set_error("Client qop not supported (qop = '$qop')")
-    unless $self->{supported_qop}{$qop};
+    unless $self->is_qop_supported($qop);
 
   my $username = $cparams{'username'}
     or return $self->set_error("Client didn't provide a username");
@@ -424,7 +430,7 @@ sub server_step {
     unless defined $password;
 
   ## configure the security layer
-  $self->_server_layer($cparams{qop} || "auth")
+  $self->_server_layer($qop)
     or return $self->set_error("Cannot negociate the security layer");
 
   my ($expected, $rspauth)
@@ -442,6 +448,12 @@ sub server_step {
 
   $self->set_success;
   return _response(\%response);
+}
+
+sub is_qop_supported {
+    my $self = shift;
+    my $qop  = shift;
+    return $self->{supported_qop}{$qop};
 }
 
 sub _response {
