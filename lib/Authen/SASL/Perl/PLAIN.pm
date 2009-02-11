@@ -55,7 +55,7 @@ sub server_start {
   if (defined $self->callback('checkpass')) {
     if ($self->_call('checkpass', @parts{qw/user pass authname/}) ) {
       $self->set_success;
-      return 1;
+      return;
     }
     else {
       return $self->set_error("Credentials don't match");
@@ -68,7 +68,7 @@ sub server_start {
     unless $expected_pass eq ($parts{pass} || "");
 
   $self->set_success;
-  return 1;
+  return;
 }
 
 1;

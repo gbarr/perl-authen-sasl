@@ -1,3 +1,4 @@
+
 Client API
 ----------
 Basically the Authen::SASL module gathers some info. When ->client_new
