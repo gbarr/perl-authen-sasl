@@ -23,9 +23,28 @@ my %params = (
   callback => {
     getsecret => sub {
         my $self = shift;
-        my ($username, $authzid) = @_;
-        return unless $username;
-        return $creds{$authzid || "default"}{$username};
+        my ($args, $cb) = @_;
+        $cb->($creds{$args->{authname} || "default"}{$args->{user} || ""});
+    },
+    checkpass => sub {
+        my $self = shift;
+        my ($args, $cb) = @_;
+        $args ||= {};
+        my $username = $args->{user};
+        my $password = $args->{pass};
+        my $authzid  = $args->{authname};
+        unless ($username) {
+            $cb->(0);
+            return;
+        }
+        my $expected = $creds{$authzid || "default"}{$username};
+        if ($expected && $expected eq ($password || "")) {
+            $cb->(1);
+        }
+        else {
+            $cb->(0);
+        }
+        return;
     },
   },
 );
@@ -52,28 +71,20 @@ for my $authname ('', 'none') {
     ok $server->is_success, "success finally";
 }
 
-sub is_failure {
-    my $creds = shift;
-    my $msg   = shift;
-    $server->server_start($creds);
-    ok !$server->is_success, $msg || "failure";
-    like $server->error, qr/match/i, "failure";
-}
-
-
 ## testing checkpass callback, which takes precedence
 ## over getsecret when specified
 %params = (
   mechanism => 'PLAIN',
   callback => {
-    getsecret => "incorrect",
+    getsecret => sub { $_[2]->("incorrect") },
     checkpass => sub {
         my $self = shift;
-        my ($username, $password, $realm) = @_;
-        is $username, "yyy", "username correct";
-        is $password, "zzz", "correct password";
-        is $realm,    "xxx", "correct realm";
-        return 1;
+        my ($args, $cb) = @_;
+        is $args->{user},     "yyy", "username correct";
+        is $args->{pass},     "zzz", "correct password";
+        is $args->{authname}, "xxx", "correct realm";
+        $cb->(1);
+        return;
     }
   },
 );
@@ -82,3 +93,13 @@ ok($ssasl = Authen::SASL->new( %params ), "new");
 $server = $ssasl->server_new("ldap","localhost");
 $server->server_start("xxx\0yyy\0zzz");
 ok $server->is_success, "success";
+
+sub is_failure {
+    my $creds = shift;
+    my $msg   = shift;
+    $server->server_start($creds);
+    ok !$server->is_success, $msg || "failure";
+    my $error = $server->error || "";
+    like $error, qr/match/i, "failure";
+}
+

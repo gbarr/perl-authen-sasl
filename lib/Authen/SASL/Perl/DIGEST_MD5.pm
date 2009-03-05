@@ -197,6 +197,7 @@ sub client_start {
 sub server_start {
   my $self       = shift;
   my $challenge  = shift;
+  my $cb         = shift || sub {};
 
   $self->{need_step} = 1;
   $self->{error}     = undef;
@@ -227,8 +228,9 @@ sub server_start {
     'qop'         => $qop,
     'cipher'      => [ map { $_->{name} } @ourciphers ],
   );
-
-  return _response(\%response);
+  my $final_response = _response(\%response);
+  $cb->($final_response);
+  return;
 }
 
 sub client_step {   # $self, $server_sasl_credentials
@@ -386,30 +388,42 @@ sub _compute_digests_and_set_keys {
 sub server_step {
   my $self      = shift;
   my $challenge = shift;
+  my $cb        = shift || sub {};
 
   $self->{client_params} = \my %cparams;
-  $self->_parse_challenge(\$challenge, client => $self->{client_params})
-     or return $self->set_error("Bad challenge: '$challenge'");
+  unless ( $self->_parse_challenge(\$challenge, client => $self->{client_params}) ) {
+   $self->set_error("Bad challenge: '$challenge'");
+   return $cb->();
+  }
 
   # check required fields in server challenge
   if (my @missing = grep { !exists $cparams{$_} } @client_required) {
-    return $self->set_error("Client did not provide required field(s): @missing")
+    $self->set_error("Client did not provide required field(s): @missing");
+    return $cb->();
   }
 
   my $count = hex ($cparams{'nc'} || 0);
-  return $self->set_error("nonce-count doesn't match: $count")
-    unless $count == ++$self->{nonce_counts}{$cparams{nonce}};
+  unless ($count == ++$self->{nonce_counts}{$cparams{nonce}}) {
+    $self->set_error("nonce-count doesn't match: $count");
+    return $cb->();
+  }
 
   my $qop = $cparams{'qop'} || "auth";
-  return $self->set_error("Client qop not supported (qop = '$qop')")
-    unless $self->is_qop_supported($qop);
+  unless ($self->is_qop_supported($qop)) {
+    $self->set_error("Client qop not supported (qop = '$qop')");
+    return $cb->();
+  }
 
-  my $username = $cparams{'username'}
-    or return $self->set_error("Client didn't provide a username");
+  my $username = $cparams{'username'};
+  unless ($username) {
+    $self->set_error("Client didn't provide a username");
+    return $cb->();
+  }
 
   # "The authzid MUST NOT be an empty string."
   if (exists $cparams{authzid} && $cparams{authzid} eq '') {
-    return $self->set_error("authzid cannot be empty");
+      $self->set_error("authzid cannot be empty");
+      return $cb->();
   }
   my $authzid = $cparams{authzid};
 
@@ -419,34 +433,49 @@ sub server_step {
   my $digest_uri = $cparams{'digest-uri'};
   my ($cservice, $chost, $cservname) = split '/', $digest_uri, 3;
   if ($cservice ne $self->service or $chost ne $self->host) {
-    # XXX deal with serv_name
-    return $self->set_error("Incorrect digest-uri");
+      # XXX deal with serv_name
+      $self->set_error("Incorrect digest-uri");
+      return $cb->(); 
   }
 
-  my $realm = $cparams{'realm'};
-  my $password = $self->_call('getsecret', $username, $realm, $authzid );
-  return $self->set_error("Cannot get the passord for $username")
-    unless defined $password;
+  unless (defined $self->callback('getsecret')) {
+    $self->set_error("a getsecret callback MUST be defined");
+    $cb->();
+    return;
+  }
 
-  ## configure the security layer
-  $self->_server_layer($qop)
-    or return $self->set_error("Cannot negociate the security layer");
+  my $realm = $self->{client_params}->{'realm'};
+  my $response_check = sub {
+    my $password = shift;
+    return $self->set_error("Cannot get the passord for $username") 
+        unless defined $password;
+ 
+    ## configure the security layer
+    $self->_server_layer($qop)
+        or return $self->set_error("Cannot negociate the security layer");
+ 
+    my ($expected, $rspauth)
+        = $self->_compute_digests_and_set_keys($password, $self->{client_params});
+ 
+    return $self->set_error("Incorrect response $self->{client_params}->{response} <> $expected")
+        unless $expected eq $self->{client_params}->{response};
+ 
+    my %response = (
+        rspauth => $rspauth,
+    );
+ 
+    # I'm not entirely sure of what I am doing
+    $self->{answer}{$_} = $self->{client_params}->{$_} for qw/username authzid realm serv/;
+ 
+    $self->set_success;
+    return _response(\%response);
+  };
 
-  my ($expected, $rspauth)
-    = $self->_compute_digests_and_set_keys($password, $self->{client_params});
-
-  return $self->set_error("Incorrect response $cparams{response} <> $expected")
-    unless $expected eq $cparams{response};
-
-  my %response = (
-    rspauth => $rspauth,
+  $self->callback('getsecret')->(
+    $self,
+    { user => $username, realm => $realm, authzid => $authzid },
+    sub { $cb->( $response_check->( shift ) ) },
   );
-
-  # I'm not entirely sure of what I am doing
-  $self->{answer}{$_} = $cparams{$_} for qw/username authzid realm serv/;
-
-  $self->set_success;
-  return _response(\%response);
 }
 
 sub is_qop_supported {
@@ -606,7 +635,6 @@ sub _client_layer {
 
 sub _select_cipher {
   my ($self, $minssf, $maxssf, $ciphers) = @_;
-  $DB::single=1;
 
   # compose a subset of candidate ciphers based on ssf and peer list
   my @a = map {

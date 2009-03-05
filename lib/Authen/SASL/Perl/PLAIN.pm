@@ -41,6 +41,7 @@ sub client_start {
 sub server_start {
   my $self      = shift;
   my $response  = shift;
+  my $user_cb   = shift || sub {};
 
   $self->{error} = undef;
   return $self->set_error("No response: Credentials don't match")
@@ -49,26 +50,48 @@ sub server_start {
   my %parts;
   @parts{@tokens} = split "\0", $response, scalar @tokens;
 
+
   # I'm not entirely sure of what I am doing
   $self->{answer}{$_} = $parts{$_} for qw/authname user/;
+  my $error = "Credentials don't match";
 
-  if (defined $self->callback('checkpass')) {
-    if ($self->_call('checkpass', @parts{qw/user pass authname/}) ) {
-      $self->set_success;
-      return;
-    }
-    else {
-      return $self->set_error("Credentials don't match");
-    }
+  ## checkpass
+  if (my $checkpass = $self->callback('checkpass')) {
+    my $cb = sub {
+      my $result = shift;
+      unless ($result) {
+        $self->set_error($error);
+        $user_cb->();
+      }
+      else {
+        $self->set_success;
+      }
+    };
+    $checkpass->($self => { %parts } => $cb );
+    return;
   }
-  my $expected_pass = $self->_call('getsecret', @parts{qw/user authname/});
-  return $self->set_error("Credentials don't match")
-    unless defined $expected_pass;
-  return $self->set_error("Credentials don't match")
-    unless $expected_pass eq ($parts{pass} || "");
 
-  $self->set_success;
-  return;
+  ## getsecret
+  elsif (my $getsecret = $self->callback('getsecret')) {
+    my $cb = sub {
+      my $good_pass = shift;
+      if ($good_pass && $good_pass eq ($parts{pass} || "")) {
+        $self->set_success;
+      }
+      else {
+        $self->set_error($error);
+      }
+      $user_cb->();
+    };
+    $getsecret->( $self, { map { $_ => $parts{$_ } } qw/user authname/ }, $cb );
+    return;
+  }
+
+  ## error by default
+  else {
+    $self->set_error($error);
+    $user_cb->();
+  }
 }
 
 1;
@@ -121,10 +144,6 @@ The user's password to be used for authentication.
 =head3 Server
 
 =over4
-
-=item getsecret(username, realm)
-
-returns the password associated with C<username> and C<realm>
 
 =item checkpass(username, password, realm)
 

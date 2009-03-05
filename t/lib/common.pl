@@ -13,14 +13,18 @@ sub negotiate {
     my $server = $server_sasl->server_new(@$s{qw/service host/});
 
     my $start     = $client->client_start();
-    my $challenge = $server->server_start($start);
+
+    my $challenge;
+    my $next_cb = sub { $challenge = shift };
+    $server->server_start($start, $next_cb);
 
     my $response;
+    ## note: this wouldn't work in a real async environment
     while ($client->need_step || $server->need_step) {
         $response = $client->client_step($challenge)
             if $client->need_step;
         last if $client->error;
-        $challenge = $server->server_step($response)
+        $server->server_step($response, $next_cb)
             if $server->need_step;
         last if $server->error;
     }

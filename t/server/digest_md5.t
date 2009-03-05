@@ -18,7 +18,7 @@ my $authname;
 my $sasl = Authen::SASL->new(
     mechanism => 'DIGEST-MD5',
     callback => {
-        getsecret => 'fred',
+        getsecret => sub { $_[2]->('fred') },
     },
 );
 ok($sasl,'new');
@@ -42,7 +42,9 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         'qop="auth"',
         'realm="elwood.innosoft.com"';
 
-    is(my $ss = $server->server_start(''), $expected_ss, 'server_start');
+    my $ss;
+    $server->server_start('', sub { $ss = shift });
+    is($ss, $expected_ss, 'server_start');
 
     my $c1 = join ",", qw(
         charset=utf-8
@@ -56,7 +58,8 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    my $s1 = $server->server_step($c1);
+    my $s1;
+    $server->server_step($c1, sub { $s1 = shift });
     ok  $server->is_success, "This is the first and only step";
     ok !$server->error, "no error" or diag $server->error;
     ok !$server->need_step, "over";
@@ -75,7 +78,9 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         'qop="auth"',
         'realm="elwood.innosoft.com"';
 
-    is(my $ss = $server->server_start(''), $expected_ss, 'server_start');
+    my $ss;
+    $server->server_start('', sub { $ss = shift });
+    is($ss, $expected_ss, 'server_start');
     ok !$server->is_success, "not success yet";
     ok !$server->error, "no error" or diag $server->error;
     ok  $server->need_step, "we need one more step";
@@ -95,7 +100,8 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    my $s1 = $server->server_step($c1);
+    my $s1;
+    $server->server_step($c1, sub { $s1 = shift });
     is($s1, "rspauth=d10458627b2b6bb553d796f4d805fdd1", "rspauth")
         or diag $server->error;
     ok $server->is_success, "success!";
@@ -116,7 +122,9 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         'qop="auth,auth-conf,auth-int"',
         'realm="elwood.innosoft.com"';
 
-    is(my $ss = $server->server_start(''), $expected_ss, 'server_start');
+    my $ss;
+    $server->server_start('', sub { $ss = shift });
+    is($ss, $expected_ss, 'server_start');
 
     my $c1 = join ",", qw(
         charset=utf-8
@@ -130,7 +138,8 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    my $s1 = $server->server_step($c1);
+    my $s1;
+    $server->server_step($c1, sub { $s1 = shift });
     ok  $server->is_success, "This is the first and only step";
     ok !$server->error, "no error" or diag $server->error;
     ok !$server->need_step, "over";
@@ -156,7 +165,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    my $s1 = $server->server_step($c1);
+    $server->server_step($c1);
     ok !$server->is_success, "Bad challenge";
     like $server->error, qr/incorrect.*response/i, $server->error;
 }
@@ -179,7 +188,7 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    my $s1 = $server->server_step($c1);
+    $server->server_step($c1);
     ok !$server->is_success, "Bad challenge";
     like $server->error, qr/Bad.*challenge/i, $server->error;
 }
@@ -201,11 +210,11 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    my $s1 = $server->server_step($c1);
+    $server->server_step($c1);
     ok $server->is_success, "first is success";
     ok ! $server->error, "no error";
 
-    my $s2 = $server->server_step($c1);
+    $server->server_step($c1);
     ok !$server->is_success, "replay attack";
     like $server->error, qr/nonce-count.*match/i, $server->error;
 }

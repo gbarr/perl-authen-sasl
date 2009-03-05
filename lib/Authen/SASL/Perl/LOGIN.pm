@@ -54,53 +54,77 @@ sub client_step {
 sub server_start {
   my $self      = shift;
   my $response  = shift;
+  my $user_cb   = shift || sub {};
 
   $self->{answer}    = {};
   $self->{stage}     = 0;
   $self->{need_step} = 1;
   $self->{error}     = undef;
-  return 'Username:';
+  $user_cb->('Username:');
+  return;
 }
 
 sub server_step {
   my $self      = shift;
   my $response  = shift;
+  my $user_cb   = shift || sub {};
 
   my $stage = ++$self->{stage};
 
   if ($stage == 1) {
-    return $self->set_error("Invalid sequence (empty username)")
-        unless defined $response;
+    unless (defined $response) {
+        $self->set_error("Invalid sequence (empty username)");
+        return $user_cb->();
+    }
     $self->{answer}{user} = $response;
-    return "Password:";
+    return $user_cb->("Password:");
   }
   elsif ($stage == 2) {
-    return $self->set_error("Invalid sequence (empty pass)")
-        unless defined $response;
+    unless (defined $response) {
+        $self->set_error("Invalid sequence (empty pass)");
+        return $user_cb->();
+    }
     $self->{answer}{pass} = $response;
   }
   else {
-    return $self->set_error("Invalid sequence (end)");
+    $self->set_error("Invalid sequence (end)");
+    return $user_cb->();
   }
-
-  if ($self->callback('checkpass')) {
-    my @answers = ($self->{answer}{user}, $self->{answer}{pass});
-    if ($self->_call('checkpass', @answers) ) {
-      $self->set_success;
-      return 1;
-    }
-    else {
-      return $self->set_error("Credentials don't match");
-    }
+  my $error = "Credentials don't match";
+  my $answers = { user => $self->{answer}{user}, pass => $self->{answer}{pass} };
+  if (my $checkpass = $self->{callback}{checkpass}) {
+    my $cb = sub {
+      my $result = shift;
+      unless ($result) {
+        $self->set_error($error);
+        $user_cb->();
+      }
+      else {
+          $self->set_success;
+      }
+    };
+    $checkpass->($self => $answers => $cb );
+    return;
   }
-  my $expected_pass = $self->_call('getsecret', $self->{answer}{user});
-  return $self->set_error("Credentials don't match, (expected)")
-    unless defined $expected_pass;
-  return $self->set_error("Credentials don't match")
-    unless $expected_pass eq ($self->{answer}{pass} || "");
-
-  $self->set_success;
-  return 1;
+  elsif (my $getsecret = $self->{callback}{getsecret}) {
+    my $cb = sub {
+      my $good_pass = shift;
+      if ($good_pass && $good_pass eq ($self->{answer}{pass} || "")) {
+        $self->set_success;
+      }
+      else {
+        $self->set_error($error);
+      }
+      $user_cb->();
+    };
+    $getsecret->($self => $answers => $cb );
+    return;
+  }
+  else {
+    $self->set_error($error);
+    $user_cb->();
+  }
+  return;
 }
 
 1;

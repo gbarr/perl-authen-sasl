@@ -10,7 +10,7 @@ use_ok('Authen::SASL::Perl::LOGIN');
 my %params = (
   mechanism => 'LOGIN',
   callback => {
-    getsecret => 'secret',
+    getsecret => sub { use Carp; Carp::confess("x") unless $_[2]; $_[2]->('secret') },
   },
 );
 
@@ -26,9 +26,12 @@ is_failure("", "");
 is_failure("xxx", "yyy", "zzz");
 is_failure("a", "a", "a");
 
-is $server->server_start(""), "Username:";
-is $server->server_step("user"), "Password:";
-$server->server_step("secret");
+my $response; my $cb = sub { $response = shift };
+$server->server_start("", $cb),
+is $response, "Username:";
+$server->server_step("user", $cb); 
+is $response, "Password:";
+$server->server_step("secret", $cb);
 
 ok !$server->error,      "no error" or diag $server->error;
 ok  $server->is_success, "success finally";
@@ -36,6 +39,7 @@ ok  $server->is_success, "success finally";
 sub is_failure {
     my $creds = shift;
     my @steps = @_;
+    ## wouldn't really work in an async environemnt
     $server->server_start("");
     for (@steps) {
         $server->server_step($_);
@@ -53,10 +57,11 @@ sub is_failure {
     getsecret => "incorrect",
     checkpass => sub {
         my $self = shift;
-        my ($username, $password) = @_;
-        is $username, "foo", "username correct";
-        is $password, "bar", "correct password";
-        return 1;
+        my ($args, $cb) = @_;
+        is $args->{user}, "foo", "username correct";
+        is $args->{pass}, "bar", "correct password";
+        $cb->(1);
+        return;
     }
   },
 );

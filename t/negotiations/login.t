@@ -6,7 +6,7 @@ use FindBin qw($Bin);
 require "$Bin/../lib/common.pl";
 
 use Authen::SASL qw(Perl);
-use_ok('Authen::SASL::Perl::PLAIN');
+use_ok('Authen::SASL::Perl::LOGIN');
 
 ## base conf
 my $cconf = {
@@ -20,12 +20,12 @@ my $cconf = {
     host => 'localhost',
     service => 'xmpp',
 };
-
+my $Password = 'maelys';
 my $sconf = {
     sasl => {
         mechanism => 'LOGIN',
         callback => {
-            getsecret => 'maelys',
+            getsecret => sub { $_[2]->($Password) },
         },
     },
     host => 'localhost',
@@ -33,7 +33,6 @@ my $sconf = {
 };
 
 ## base negotiation should work
-$DB::single=1;
 negotiate($cconf, $sconf, sub {
     my ($clt, $srv) = @_;
     is $clt->mechanism, "LOGIN";
@@ -45,7 +44,7 @@ negotiate($cconf, $sconf, sub {
 ## invalid password
 {
     # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{getsecret} = "wrong";
+    $Password = "wrong";
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;
@@ -54,10 +53,9 @@ negotiate($cconf, $sconf, sub {
     });
 }
 
-## invalid password
+## invalid password with different callback
 {
-    # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{checkpass} = sub { 0 };
+    local $sconf->{sasl}{callback}{checkpass} = sub { $_[2]->(0) };
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;

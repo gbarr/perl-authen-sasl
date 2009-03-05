@@ -23,7 +23,7 @@ my $sconf = {
     sasl => {
         mechanism => 'DIGEST-MD5',
         callback => {
-            getsecret => 'maelys',
+            getsecret => sub { $_[2]->('maelys') },
         },
     },
     host => 'localhost',
@@ -53,11 +53,11 @@ negotiate($cconf, $sconf, sub {
     local $cconf->{sasl}{callback}{authname} = "some authzid";
     local $sconf->{sasl}{callback}{getsecret} = sub {
         my $server = shift;
-        my ($username, $realm, $authzid) = @_;
-        is $username, "yann",         "username";
-        is $realm,    "localhost",    "realm";
-        is $authzid,  "some authzid", "authzid";
-        return "incorrect";
+        my ($args, $cb) = @_;
+        is $args->{user},     "yann",         "username";
+        is $args->{realm},    "localhost",    "realm";
+        is $args->{authzid},  "some authzid", "authzid";
+        $cb->("incorrect");
     };
 
     negotiate($cconf, $sconf, sub {

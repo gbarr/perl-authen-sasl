@@ -21,11 +21,12 @@ my $cconf = {
     service => 'xmpp',
 };
 
+my $Password = 'maelys';
 my $sconf = {
     sasl => {
         mechanism => 'PLAIN',
         callback => {
-            getsecret => 'maelys',
+            getsecret => sub { $_[2]->($Password) },
         },
     },
     host => 'localhost',
@@ -44,7 +45,7 @@ negotiate($cconf, $sconf, sub {
 ## invalid password
 {
     # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{getsecret} = "x";
+    $Password = "x";
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;
@@ -55,8 +56,7 @@ negotiate($cconf, $sconf, sub {
 
 ## invalid password with different callback
 {
-    # hey callback could just be a subref that returns a localvar
-    local $sconf->{sasl}{callback}{checkpass} = sub { 0 };
+    local $sconf->{sasl}{callback}{checkpass} = sub { $_[2]->(0) };
 
     negotiate($cconf, $sconf, sub {
         my ($clt, $srv) = @_;
