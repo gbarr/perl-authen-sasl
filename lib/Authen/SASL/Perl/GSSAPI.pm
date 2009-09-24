@@ -251,7 +251,7 @@ Please note that this module does not currently implement a SASL
 security layer following authentication. Unless the connection is
 protected by other means, such as TLS, it will be vulnerable to
 man-in-the-middle attacks. If security layers are required, then the
-Authen::SASL::Cyrus GSSAPI module should be used instead.
+L<Authen::SASL::XS> GSSAPI module should be used instead.
 
 =head2 CALLBACK
 
