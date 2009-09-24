@@ -9,7 +9,7 @@ use strict;
 use vars qw($VERSION @ISA);
 use GSSAPI;
 
-$VERSION= "0.04";
+$VERSION= "0.05";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (
@@ -57,7 +57,8 @@ sub client_start {
   $self->{gss_ctx}   = new GSSAPI::Context;
   $self->{gss_state} = 0;
   $self->{gss_layer} = undef;
-  $self->{gss_cred}  = $self->_call('pass') || GSS_C_NO_CREDENTIAL;
+  my $cred = $self->_call('pass');
+  $self->{gss_cred}  = (ref($cred) && $cred->isa('GSSAPI::Cred')) ? $cred : GSS_C_NO_CREDENTIAL;
   $self->{gss_mech}  = $self->_call('gssmech') || gss_mech_krb5;
 
   # reset properties for new session
