@@ -1,3 +1,10 @@
+Authen-SASL 2.13 -- Thu Sep 24 17:27:47 CDT 2009
+
+  * RT#42191 Only use pass for GSSAPI credentials if it is an object of type GSSAPI::Cred
+  * RT#675 Authorization with Authen::SASL::Perl::External
+  * Call client_new and server_new inside eval so further plugins can be tried before failing
+  * Prefer to use Authen::SASL::XS over Authen::SASL::Cyrus
+
 Authen-SASL 2.12 -- Mon Jun 30 21:35:21 CDT 2008
 
 Enhancements
