@@ -20,8 +20,8 @@ my $conn = $sasl->client_new("ldap","localhost", "noplaintext");
 
 is($conn->mechanism, 'EXTERNAL', 'conn mechanism');
 
-is($conn->client_start, '', 'client_start');
+is($conn->client_start, 'gbarr', 'client_start');
 
-is($conn->client_step("xyz"),  'gbarr', 'client_step');
+is($conn->client_step("xyz"),  undef, 'client_step');
 
 
