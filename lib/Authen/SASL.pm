@@ -71,24 +71,32 @@ sub callback {
 sub client_new { # $self, $service, $host, $secflags
   my $self = shift;
 
+  my $err;
   foreach my $pkg (@Plugins) {
     if (eval "require $pkg" and $pkg->can("client_new")) {
-      return ($self->{conn} = $pkg->client_new($self, @_));
+      if ($self->{conn} = eval { $pkg->client_new($self, @_) }) {
+        return $self->{conn};
+      }
+      $err = $@;
     }
   }
 
-  croak "Cannot find a SASL Connection library";
+  croak $err || "Cannot find a SASL Connection library";
 }
 
 sub server_new { # $self, $service, $host, $secflags
   my $self = shift;
 
+  my $err;
   foreach my $pkg (@Plugins) {
     if (eval "require $pkg" and $pkg->can("server_new")) {
-      return ($self->{conn} = $pkg->server_new($self, @_));
+      if ($self->{conn} = eval { $pkg->server_new($self, @_) } ) {
+        return $self->{conn};
+      }
+      $err = $@;
     }
   }
-  croak "Cannot find a SASL Connection library for server-side authentication";
+  croak $err || "Cannot find a SASL Connection library for server-side authentication";
 }
 
 sub error {
