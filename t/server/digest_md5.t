@@ -110,43 +110,48 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
     is $server->property('ssf'), 0, "auth doesn't provide any protection";
 }
 
-## using auth-conf
+## using auth-conf (if available)
 {
-    $server = $sasl->server_new("ldap","elwood.innosoft.com");
-    my $expected_ss = join ",",
-        'algorithm=md5-sess',
-        'charset=utf-8',
-        'cipher="rc4,3des,des,rc4-56,rc4-40"',
-        'maxbuf=16777215',
-        'nonce="80338e79d2ca9b9c090ebaaa2ef293c7"',
-        'qop="auth,auth-conf,auth-int"',
-        'realm="elwood.innosoft.com"';
+    SKIP: {
+        skip "Crypt not available", 6
+            if $Authen::SASL::Perl::DIGEST_MD5::NO_CRYPT_AVAILABLE;
 
-    my $ss;
-    $server->server_start('', sub { $ss = shift });
-    is($ss, $expected_ss, 'server_start');
+        $server = $sasl->server_new("ldap","elwood.innosoft.com");
+        my $expected_ss = join ",",
+            'algorithm=md5-sess',
+            'charset=utf-8',
+            'cipher="rc4,3des,des,rc4-56,rc4-40"',
+            'maxbuf=16777215',
+            'nonce="80338e79d2ca9b9c090ebaaa2ef293c7"',
+            'qop="auth,auth-conf,auth-int"',
+            'realm="elwood.innosoft.com"';
 
-    my $c1 = join ",", qw(
-        charset=utf-8
-        cnonce="3858f62230ac3c915f300c664312c63f"
-        digest-uri="ldap/elwood.innosoft.com"
-        nc=00000001
-        nonce="80338e79d2ca9b9c090ebaaa2ef293c7"
-        qop=auth-conf
-        realm="elwood.innosoft.com"
-        response=e3c8b38d9bd9556761253e9879c4a8a2
-        username="gbarr"
-    );
+        my $ss;
+        $server->server_start('', sub { $ss = shift });
+        is($ss, $expected_ss, 'server_start');
 
-    my $s1;
-    $server->server_step($c1, sub { $s1 = shift });
-    ok  $server->is_success, "This is the first and only step";
-    ok !$server->error, "no error" or diag $server->error;
-    ok !$server->need_step, "over";
-    is($s1, "rspauth=1b1156d0e7f046bd0ea1476eb7d63a7b", "rspauth matches");
+        my $c1 = join ",", qw(
+            charset=utf-8
+            cnonce="3858f62230ac3c915f300c664312c63f"
+            digest-uri="ldap/elwood.innosoft.com"
+            nc=00000001
+            nonce="80338e79d2ca9b9c090ebaaa2ef293c7"
+            qop=auth-conf
+            realm="elwood.innosoft.com"
+            response=e3c8b38d9bd9556761253e9879c4a8a2
+            username="gbarr"
+        );
 
-    ## we have negociated the conf layer
-    ok $server->property('ssf') > 1, "yes! secure layer set up";
+        my $s1;
+        $server->server_step($c1, sub { $s1 = shift });
+        ok  $server->is_success, "This is the first and only step";
+        ok !$server->error, "no error" or diag $server->error;
+        ok !$server->need_step, "over";
+        is($s1, "rspauth=1b1156d0e7f046bd0ea1476eb7d63a7b", "rspauth matches");
+
+        ## we have negociated the conf layer
+        ok $server->property('ssf') > 1, "yes! secure layer set up";
+    };
 }
 ## wrong challenge response
 {
@@ -167,7 +172,13 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
 
     $server->server_step($c1);
     ok !$server->is_success, "Bad challenge";
-    like $server->error, qr/incorrect.*response/i, $server->error;
+
+    if ($Authen::SASL::Perl::DIGEST_MD5::NO_CRYPT_AVAILABLE) {
+        like $server->error, qr/Client qop not supported/, $server->error;
+    }
+    else {
+        like $server->error, qr/incorrect.*response/i, $server->error;
+    }
 }
 
 ## multiple digest-uri;
@@ -210,11 +221,15 @@ is($server->mechanism, 'DIGEST-MD5', 'conn mechanism');
         username="gbarr"
     );
 
-    $server->server_step($c1);
-    ok $server->is_success, "first is success";
-    ok ! $server->error, "no error";
+    SKIP: {
+        skip "no crypt available", 4
+            if $Authen::SASL::Perl::DIGEST_MD5::NO_CRYPT_AVAILABLE;
+        $server->server_step($c1);
+        ok $server->is_success, "first is success";
+        ok ! $server->error, "no error";
 
-    $server->server_step($c1);
-    ok !$server->is_success, "replay attack";
-    like $server->error, qr/nonce-count.*match/i, $server->error;
+        $server->server_step($c1);
+        ok !$server->is_success, "replay attack";
+        like $server->error, qr/nonce-count.*match/i, $server->error;
+    }
 }
