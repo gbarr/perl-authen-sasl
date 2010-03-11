@@ -1,3 +1,11 @@
+Authen-SASL 2.14 -- Thu Mar 11 08:21:07 CST 2010
+
+  * Documentation updates  [Yann Kerherve]
+  * Added server API description [Yann Kerherve]
+  * Bugfixes to LOGIN, PLAIN and DIGEST_MD5 [Yann Kerherve]
+  * Added server support for LOGIN, PLAINaand DIGEST_MD5 [Yann Kerherve]
+  * Compatiblity with Authen::SASL::XS [Yann Kerherve]
+
 Authen-SASL 2.13 -- Thu Sep 24 17:27:47 CDT 2009
 
   * RT#42191 Only use pass for GSSAPI credentials if it is an object of type GSSAPI::Cred

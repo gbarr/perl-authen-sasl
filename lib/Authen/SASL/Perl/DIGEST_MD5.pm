@@ -14,7 +14,7 @@ use Digest::HMAC_MD5 qw(hmac_md5);
 
 # TODO: complete qop support in server, should be configurable
 
-$VERSION = "1.07";
+$VERSION = "2.14";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (

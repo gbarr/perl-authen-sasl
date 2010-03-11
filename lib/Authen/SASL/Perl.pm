@@ -8,7 +8,7 @@ use strict;
 use vars qw($VERSION);
 use Carp;
 
-$VERSION = "1.07";
+$VERSION = "2.14";
 
 my %secflags = (
 	noplaintext  => 1,

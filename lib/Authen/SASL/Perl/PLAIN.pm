@@ -7,7 +7,7 @@ package Authen::SASL::Perl::PLAIN;
 use strict;
 use vars qw($VERSION @ISA);
 
-$VERSION = "1.04";
+$VERSION = "2.14";
 @ISA	 = qw(Authen::SASL::Perl);
 
 my %secflags = (
