@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 20;
+use Test::More tests => 32;
 
 use Authen::SASL qw(Perl);
 use_ok('Authen::SASL::Perl::LOGIN');
@@ -40,9 +40,13 @@ sub is_failure {
     my $creds = shift;
     my @steps = @_;
     ## wouldn't really work in an async environemnt
-    $server->server_start("");
+    my $cb;
+    $server->server_start("", sub { $cb = 1 });
+    ok $cb, "callback called";
     for (@steps) {
-        $server->server_step($_);
+        $cb = 0;
+        $server->server_step($_, sub { $cb = 1 });
+        ok $cb, "callback called";
     }
     ok !$server->is_success, "failure";
     ok ($server->need_step or $server->error), "no success means that";
@@ -68,7 +72,11 @@ sub is_failure {
 
 ok($ssasl = Authen::SASL->new( %params ), "new");
 $server = $ssasl->server_new("ldap","localhost");
-$server->server_start("");
-$server->server_step("foo");
-$server->server_step("bar");
+my $cb;
+$server->server_start("", sub { $cb = 1 });
+ok $cb, "callback called"; $cb = 0;
+$server->server_step("foo", sub { $cb = 1 });
+ok $cb, "callback called"; $cb = 0;
+$server->server_step("bar", sub { $cb = 1 });
+ok $cb, "callback called";
 ok $server->is_success, "success";

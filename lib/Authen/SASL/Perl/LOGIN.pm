@@ -97,11 +97,11 @@ sub server_step {
       my $result = shift;
       unless ($result) {
         $self->set_error($error);
-        $user_cb->();
       }
       else {
-          $self->set_success;
+        $self->set_success;
       }
+      $user_cb->();
     };
     $checkpass->($self => $answers => $cb );
     return;

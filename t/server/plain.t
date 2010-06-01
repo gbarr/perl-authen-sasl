@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 47;
+use Test::More tests => 67;
 
 use Authen::SASL qw(Perl);
 use_ok('Authen::SASL::Perl::PLAIN');
@@ -67,7 +67,9 @@ for my $authname ('', 'none') {
     is_failure("$authname\0yann\0\0maelys", "double null");
     is_failure("$authname\0yann\0maelys\0trailing", "trailing");
 
-    $server->server_start("$authname\0yann\0maelys");
+    my $cb;
+    $server->server_start("$authname\0yann\0maelys", sub { $cb = 1 });
+    ok $cb, "callback called";
     ok $server->is_success, "success finally";
 }
 
@@ -97,7 +99,9 @@ ok $server->is_success, "success";
 sub is_failure {
     my $creds = shift;
     my $msg   = shift;
-    $server->server_start($creds);
+    my $cb;
+    $server->server_start($creds, sub { $cb = 1 });
+    ok $cb, 'callback called';
     ok !$server->is_success, $msg || "failure";
     my $error = $server->error || "";
     like $error, qr/match/i, "failure";
