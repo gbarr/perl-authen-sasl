@@ -1,3 +1,7 @@
+Authen-SASL 2.15 -- Wed Jun 2 13:47:41 CDT 2010
+
+  * Makes sure that user callbacks are called [Yann Kerherve]
+
 Authen-SASL 2.1401 -- Mon Mar 29 14:22:54 CDT 2010
 
   * Add META.yml to release
