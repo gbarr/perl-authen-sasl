@@ -62,7 +62,7 @@ or if you have another plugin module that supports the Authen::SASL API
 
 =item new ( OPTIONS )
 
-The contructor may be called with or without arguments. Passing arguments is
+The constructor may be called with or without arguments. Passing arguments is
 just a short cut to calling the C<mechanism> and C<callback> methods.
 
 =over 4
