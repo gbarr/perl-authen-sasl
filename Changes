@@ -1,3 +1,8 @@
+Authen-SASL 2.16 -- Tue Sep  4 11:01:18 CDT 2012
+
+  * SASL.pod: fix typo [Peter Marschall]
+  * Perl.pm: avoid warning on "uninitialized value" [Peter Marschall]
+
 Authen-SASL 2.15 -- Wed Jun 2 13:47:41 CDT 2010
 
   * Makes sure that user callbacks are called [Yann Kerherve]
