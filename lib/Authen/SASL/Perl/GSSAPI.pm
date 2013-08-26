@@ -115,7 +115,7 @@ sub client_step {
     # the security layers the server supports: bitmask of
     #   1 = no security layer,
     #   2 = integrity protection,
-    #   4 = confidelity protection
+    #   4 = confidentiality protection
     # which is encoded in the first octet of the response;
     # the remote maximum buffer size is encoded in the next three octets
     #
@@ -190,7 +190,7 @@ sub _layer {
   $ourmask |= 4 if ($maxssf > 1);
   $ourmask &= 1 unless ($rsz and $lsz);
 
-  # mask the bits they dont have
+  # mask the bits they don't have
   $ourmask &= $theirmask;
 
   return $ourmask unless $self->property('COMPAT_CYRUSLIB_REPLY_MASK_BUG');

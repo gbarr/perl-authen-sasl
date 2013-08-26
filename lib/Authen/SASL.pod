@@ -1,4 +1,3 @@
-
 =head1 NAME
 
 Authen::SASL - SASL Authentication framework
@@ -39,7 +38,7 @@ are supported).
 
 =item Authen::SASL::Cyrus
 
-This module is the predecessor to L<Authen::SASL::XS>. It is reccomended
+This module is the predecessor to L<Authen::SASL::XS>. It is recommended
 to use L<Authen::SASL::XS>
 
 =back
