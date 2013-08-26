@@ -131,7 +131,7 @@ sub server_step  { undef }
 sub server_start { undef }
 
 # Private methods used by Authen::SASL::Perl that
-# may be overridden in mechanism sub-calsses
+# may be overridden in mechanism sub-classes
 
 sub _init {
   my ($pkg, $href) = @_;
