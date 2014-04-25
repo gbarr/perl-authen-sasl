@@ -63,7 +63,7 @@ sub client_new {
     (my $mpkg = __PACKAGE__ . "::$_") =~ s/-/_/g;
     $mpkg;
   } split /[^-\w]+/, $parent->mechanism
-    or croak "No SASL mechanism found\n";
+    or croak "No SASL mechanism found: ", $parent->mechanism, "\n";
 
   $mpkg[0]->_init($self);
 }
