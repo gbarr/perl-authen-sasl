@@ -172,7 +172,7 @@ The user's password to be used for authentication
 
 =head3 Server
 
-=over4
+=over 4
 
 =item getsecret(username)
 
