@@ -802,7 +802,7 @@ in the initial response.
 
 =head3 server
 
-=over4
+=over 4
 
 =item realm
 
