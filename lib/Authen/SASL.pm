@@ -124,7 +124,7 @@ sub initial {
 
 sub name {
   my $self = shift;
-  $self->{conn} ? $self->{conn}->mechanism : ($self->{mechanism} =~ /(\S+)/)[0];
+  $self->{conn} ? $self->{conn}->mechanism : (($self->{mechanism} || '') =~ /(\S+)/)[0];
 }
 
 1;
