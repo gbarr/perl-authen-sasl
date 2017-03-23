@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use 5.005;
+use lib '.';
 use inc::Module::Install;
 
 name		'Authen-SASL';
