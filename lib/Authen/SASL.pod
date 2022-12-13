@@ -79,6 +79,14 @@ See the L<callback|/callback> method for details.
 Set the list of mechanisms to choose from.
 See the L<mechanism|/mechanism> method for details.
 
+=item maxssf =E<gt> VALUE
+
+Override the SASL Maximum Security Strength Factor to C<VALUE>. This is required
+to be 0 for non-standard server implementations (ie. Active Directory) that do not 
+support SASL-layer encryption or integrity on SSL/TLS-protected connections.
+
+The default value is 2**31 - 1 for the Perl module, and 255 for the XS module.
+
 =item debug =E<gt> VALUE
 
 Set the debug level bit-value to C<VALUE> 

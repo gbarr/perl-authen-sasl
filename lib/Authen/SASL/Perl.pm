@@ -65,7 +65,9 @@ sub client_new {
   } split /[^-\w]+/, $parent->mechanism
     or croak "No SASL mechanism found\n";
 
-  $mpkg[0]->_init($self);
+  my $conn = $mpkg[0]->_init($self);
+  $conn->property('maxssf' => $parent->{maxssf}) if defined $parent->{maxssf};
+  return $conn;
 }
 
 sub _init_server {}

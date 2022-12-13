@@ -35,6 +35,7 @@ sub new {
     mechanism => $opt{mechanism} || $opt{mech},
     callback  => {},
     debug => $opt{debug},
+    maxssf => $opt{maxssf},
   }, $pkg;
 
   $self->callback(%{$opt{callback}}) if ref($opt{callback}) eq 'HASH';
