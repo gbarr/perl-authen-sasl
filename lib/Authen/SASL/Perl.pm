@@ -59,6 +59,7 @@ sub client_new {
   } grep {
     my $have = $have{$_} ||= (eval "require $_;" and $_->can('_secflags')) ? 1 : -1;
     $have > 0 and $_->_secflags(@sec) == @sec
+        and $_->_acceptable( %{$parent->callback} )
   } map {
     (my $mpkg = __PACKAGE__ . "::$_") =~ s/-/_/g;
     $mpkg;
@@ -70,6 +71,7 @@ sub client_new {
 
 sub _init_server {}
 
+sub _acceptable  { 1 }
 sub _order   { 0 }
 sub code     { defined(shift->{error}) || 0 }
 sub error    { shift->{error}    }
