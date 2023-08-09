@@ -208,7 +208,7 @@ sub server_start {
   my $qop = [ sort keys %{$self->{supported_qop}} ];
 
   ## get the realm using callbacks but default to the host specified
-  ## during the instanciation of the SASL object
+  ## during the instantiation of the SASL object
   my $realm = $self->_call('realm');
   $realm  ||= $self->host;
 
