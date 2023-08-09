@@ -319,10 +319,11 @@ sub securesocket {
   # Encrypting a write() to a filehandle is much easier than reading, because
   # all the data to be encrypted is immediately available
   sub WRITE {
-    my ($self, undef, $len, $offset) = @_;
+    my ($self, $data, $len, $offset) = @_;
     my $debug = $self->{conn}->{debug};
 
     my $fh = $self->{fh};
+    $len = length($data) if $len > length($data); # RT 85294
 
     # put on wire in peer-sized chunks
     my $bsz = $self->{sndbufsz};
@@ -331,7 +332,7 @@ sub securesocket {
         if ($debug & 8);
 
       # call mechanism specific encoding routine
-      my $x = $self->{conn}->encode(substr($_[1], $offset || 0, $bsz));
+      my $x = $self->{conn}->encode(substr($data, $offset || 0, $bsz));
       print $fh pack('N', length($x)), $x;
       $len -= $bsz;
       $offset += $bsz;
