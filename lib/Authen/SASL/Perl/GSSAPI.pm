@@ -5,6 +5,7 @@
 package Authen::SASL::Perl::GSSAPI;
 
 use strict;
+use warnings;
 
 use vars qw($VERSION @ISA);
 use GSSAPI;
@@ -280,6 +281,7 @@ The GSS credentials to be used in the connection (optional)
  #! /usr/bin/perl -w
 
  use strict;
+use warnings;
 
  use Net::LDAP 0.33;
  use Authen::SASL 2.10;

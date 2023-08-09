@@ -5,6 +5,7 @@
 package Authen::SASL::Perl;
 
 use strict;
+use warnings;
 use vars qw($VERSION);
 use Carp;
 

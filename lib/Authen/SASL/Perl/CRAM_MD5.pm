@@ -5,6 +5,7 @@
 package Authen::SASL::Perl::CRAM_MD5;
 
 use strict;
+use warnings;
 use vars qw($VERSION @ISA);
 use Digest::HMAC_MD5 qw(hmac_md5_hex);
 

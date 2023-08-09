@@ -21,3 +21,4 @@ cover_db
 \.shipit
 ^Authen-SASL-*
 \.git.*
+MYMETA\..*
