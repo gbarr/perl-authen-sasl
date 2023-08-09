@@ -12,7 +12,7 @@ version_from	'lib/Authen/SASL.pm';
 license		'perl';
 repository	'http://github.com/gbarr/perl-authen-sasl';
 
-perl_version	5.005;
+perl_version	5.006;
 
 test_requires	'Test::More' => 0;
 requires	'Digest::MD5'  => 0;
