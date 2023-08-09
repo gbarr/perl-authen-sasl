@@ -5,6 +5,7 @@
 package Authen::SASL::EXTERNAL;
 
 use strict;
+use warnings;
 use vars qw($VERSION);
 
 $VERSION = "2.14";

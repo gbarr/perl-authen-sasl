@@ -6,6 +6,7 @@
 package Authen::SASL::Perl::EXTERNAL;
 
 use strict;
+use warnings;
 use vars qw($VERSION @ISA);
 
 $VERSION = "2.14";

@@ -5,6 +5,7 @@
 package Authen::SASL::Perl::ANONYMOUS;
 
 use strict;
+use warnings;
 use vars qw($VERSION @ISA);
 
 $VERSION = "2.14";

@@ -5,6 +5,7 @@
 package Authen::SASL;
 
 use strict;
+use warnings;
 use vars qw($VERSION @Plugins);
 use Carp;
 
