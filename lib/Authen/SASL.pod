@@ -224,6 +224,10 @@ passing an code reference that, when called, returns the value.
 
 L<Authen::SASL::Perl>, L<Authen::SASL::XS>, L<Authen::SASL::Cyrus>
 
+=head1 MAINTAINER
+
+Erik Huelsmann <ehuels@gmail.com>
+
 =head1 AUTHOR
 
 Graham Barr <gbarr@pobox.com>
@@ -233,7 +237,10 @@ Please report any bugs, or post any suggestions, to the perl-ldap mailing list
 
 =head1 COPYRIGHT
 
-Copyright (c) 1998-2005 Graham Barr. All rights reserved. This program is
+  Copyright (c) 2023 Erik Huelsmann
+  Copyright (c) 1998-2005 Graham Barr.
+
+All rights reserved. This program is
 free software; you can redistribute it and/or modify it under the same
 terms as Perl itself.
 
