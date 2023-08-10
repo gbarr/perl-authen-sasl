@@ -189,7 +189,8 @@ sub securesocket {
 # Add SASL encoding/decoding to a filehandle
 #
 
-  package Authen::SASL::Perl::Layer;
+  package # private package; prevent detection by MetaCPAN
+      Authen::SASL::Perl::Layer;
 
   use bytes;
 
