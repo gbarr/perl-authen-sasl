@@ -6,10 +6,8 @@ package Authen::SASL::Perl;
 
 use strict;
 use warnings;
-use vars qw($VERSION);
 use Carp;
 
-$VERSION = "2.14";
 
 my %secflags = (
 	noplaintext  => 1,

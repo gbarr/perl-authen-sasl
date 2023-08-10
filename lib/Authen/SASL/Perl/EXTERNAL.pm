@@ -7,9 +7,8 @@ package Authen::SASL::Perl::EXTERNAL;
 
 use strict;
 use warnings;
-use vars qw($VERSION @ISA);
+use vars qw(@ISA);
 
-$VERSION = "2.14";
 @ISA	 = qw(Authen::SASL::Perl);
 
 my %secflags = (

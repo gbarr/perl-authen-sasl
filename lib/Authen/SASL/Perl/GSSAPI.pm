@@ -7,10 +7,9 @@ package Authen::SASL::Perl::GSSAPI;
 use strict;
 use warnings;
 
-use vars qw($VERSION @ISA);
+use vars qw(@ISA);
 use GSSAPI;
 
-$VERSION= "0.05";
 @ISA = qw(Authen::SASL::Perl);
 
 my %secflags = (

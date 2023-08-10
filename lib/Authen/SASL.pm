@@ -6,10 +6,9 @@ package Authen::SASL;
 
 use strict;
 use warnings;
-use vars qw($VERSION @Plugins);
+use vars qw(@Plugins);
 use Carp;
 
-$VERSION = "2.16";
 
 @Plugins = qw(
 	Authen::SASL::XS
