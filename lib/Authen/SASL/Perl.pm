@@ -10,9 +10,9 @@ use Carp;
 
 
 my %secflags = (
-	noplaintext  => 1,
-	noanonymous  => 1,
-	nodictionary => 1,
+        noplaintext  => 1,
+        noanonymous  => 1,
+        nodictionary => 1,
 );
 my %have;
 
