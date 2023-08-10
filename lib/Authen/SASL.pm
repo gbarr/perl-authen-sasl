@@ -11,9 +11,8 @@ use Carp;
 
 
 @Plugins = qw(
-	Authen::SASL::XS
-	Authen::SASL::Cyrus
-	Authen::SASL::Perl
+        Authen::SASL::XS
+        Authen::SASL::Perl
 );
 
 
