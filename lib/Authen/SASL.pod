@@ -232,8 +232,11 @@ Erik Huelsmann <ehuels@gmail.com>
 
 Graham Barr <gbarr@pobox.com>
 
-Please report any bugs, or post any suggestions, to the perl-ldap mailing list
-<perl-ldap@perl.org>
+=head1 BUGS
+
+Please report any bugs, or any suggestions, in the GitHub project at
+L<https://github.com/gbarr/perl-authen-sasl/issues>.
+
 
 =head1 COPYRIGHT
 
