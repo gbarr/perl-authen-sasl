@@ -1,3 +1,13 @@
+
+2.1800  TO BE RELEASED
+  [Added]
+    - Include mechanisms available on server when
+      negotiation fails on the client
+    - Add `_acceptable()` function to allow mechanism
+      implementation classes to decline selection based
+      on the callback values
+
+
 2.1700  2023-08-09
   [Fixed]
     - Version numbering (released as 2.1700,
