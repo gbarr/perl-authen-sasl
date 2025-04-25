@@ -8,6 +8,7 @@ package Authen::SASL::Perl::XOAUTH2;
 
 use strict;
 use vars qw(@ISA);
+use JSON::PP;
 
 @ISA     = qw(Authen::SASL::Perl);
 
@@ -24,7 +25,6 @@ sub _secflags {
 
 sub mechanism { 'XOAUTH2' }
 
-
 sub client_start {
     my $self = shift;
     $self->{stage} = 0;
@@ -39,16 +39,12 @@ sub client_start {
 
 sub client_step {
     my ($self, $challenge) = @_;
-
-    my $stage = ++$self->{stage};
-
-    if ($stage == 1) {
-        # Send dummy request on authentication failure according to rfc7628.
-        # https://datatracker.ietf.org/doc/html/rfc7628#section-3.2.3
-        return "\001";
-    } else {
-        return $self->set_error("Invalid sequence");
-    }
+    my $json = JSON::PP->new;
+    my $payload = $json->decode( $challenge );
+    $self->set_error( $payload );
+    # Send dummy request on authentication failure according to rfc7628.
+    # https://datatracker.ietf.org/doc/html/rfc7628#section-3.2.3
+    return "\001";
 }
 
 1;
