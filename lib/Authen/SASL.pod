@@ -198,7 +198,7 @@ succeeded by calling this method which returns a boolean value.
 
 There are three different ways in which a callback may be passed
 
-=over
+=over 4
 
 =item CODEREF
 
