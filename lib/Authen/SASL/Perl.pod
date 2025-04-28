@@ -165,6 +165,8 @@ L<Authen::SASL::Perl::XOAUTH2>
 
 Peter Marschall <peter@adpm.de>
 
+=head1 CONTRIBUTORS
+
 Aditya Garg <gargaditya08@live.com>
 
 Please report any bugs, or post any suggestions, to the perl-ldap mailing list
