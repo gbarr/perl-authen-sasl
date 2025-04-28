@@ -114,7 +114,9 @@ Written by Aditya Garg and Julian Swagemakers.
 =head1 COPYRIGHT
 
 Copyright (c) 2025 Aditya Garg.
+
 Copyright (c) 2025 Julian Swagemakers.
+
 All rights reserved. This program is free software; you can redistribute 
 it and/or modify it under the same terms as Perl itself.
 =cut
